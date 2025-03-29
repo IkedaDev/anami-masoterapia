@@ -1,0 +1,50 @@
+---
+import ScheduleVisit from "@/components/ScheduleVisit.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import IMG_HEADER from "@/assets/images/p3-s1-1.jpg";
+import IMG_HEADER_3 from "@/assets/images/massage-17-1.jpg";
+import IMG_9 from "@/assets/images/massage-09-1.jpg";
+import { Picture } from "astro:assets";
+import ServiceShowcase from "@/components/ServiceShowcase.astro";
+import Section1 from "@/components/Section-1.astro";
+---
+
+<MainLayout title="Anami Masoterapia">
+  <section
+    class="relative flex max-h-[400px] max-w-6xl mx-auto justify-between mb-[200px]"
+  >
+    <div
+      class="md:w-1/2 flex justify-center items-center relative z-10 mx-auto mt-5"
+    >
+      <h1
+        class="mb-0 md:mb-[100px] mt-7 md:mt-0 ml-4 xl:ml-0 title tracking-wider text-5xl md:text-7xl text-center md:text-left"
+      >
+        <span class="hidden sm:inline-block md:block">Hotel</span>
+        <span class="inline-block md:block">Tierra del Sur</span>
+      </h1>
+    </div>
+
+    <Picture
+      src={IMG_HEADER}
+      class="h-full object-contain relative z-10 hidden md:inline-block"
+      alt="Masajes Hotel Tierra del Sur, Temuco"
+    />
+    <Picture
+      class="absolute z-0 translate-x-[-50%] scale-x-[-1] left-1/2 max-w-1/2"
+      src={IMG_HEADER_3}
+      alt="Fondo Cálido"
+      loading="lazy"
+      width={450}
+      formats={["webp", "jpeg"]}
+    />
+  </section>
+  <ServiceShowcase />
+  <Section1 />
+  <ScheduleVisit />
+  <Picture
+    src={IMG_9}
+    alt="Naranjas relajantes"
+    height={400}
+    class="mx-auto w-7xl"
+  />
+</MainLayout>

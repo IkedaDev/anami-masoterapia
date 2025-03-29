@@ -1,0 +1,102 @@
+---
+import Header from "@/components/header/Header.astro";
+
+import "../styles/global.css";
+import Footer from "@/components/Footer.astro";
+import { CONFIG } from "@/config/const";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="theme-color" content="#fdd835" />
+    <title>{title}</title>
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="rating" content="general" />
+    <meta
+      name="description"
+      content="Servicio de Masoterapia y limpieza facial en Temuco, CHILE"
+    />
+    <meta
+      name="keywords"
+      content="Masoterapia, Masaje, Limpieza Facial, Relajante, Drenaje Linfático, Temuco"
+    />
+    <meta name="author" content="IkedaDev" />
+    <meta property="og:title" content="Anami Masoterapia" />
+    <meta property="og:url" content="https://ikedadev.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="Anami Masoterapia" />
+    <meta property="og:image" content="image-link" />
+    <meta
+      property="og:description"
+      content="Servicio de Masoterapia y limpieza facial en Temuco, CHILE"
+    />
+    <meta name="twitter:title" content="Anami Masoterapia" />
+    <meta
+      name="twitter:description"
+      content="Servicio de Masoterapia y limpieza facial en Temuco, CHILE"
+    />
+    <meta name="twitter:image" content="image-link" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@AnamiMasoterapia" />
+    <ClientRouter />
+  </head>
+  <body>
+    <Header />
+    <main class="">
+      <slot />
+    </main>
+    <img
+      class="fixed bottom-5 right-5 hover:drop-shadow-2xl transition-all cursor-pointer z-30"
+      src="WhatsApp.svg"
+      alt="WhatsApp Anami Masoterapia"
+      width="60"
+      height="60"
+      data-phone={CONFIG.phone}
+      data-message={CONFIG.whatsAppText}
+      id="btn-whatsapp-contact"
+    />
+
+    <Footer />
+  </body>
+</html>
+
+<script>
+  const btnWhatsappContact = document.getElementById(
+    "btn-whatsapp-contact"
+  ) as HTMLImageElement;
+
+  const handleClick = (event: Event) => {
+    const phone = (event.target as HTMLImageElement).dataset.phone;
+    const message = encodeURIComponent(
+      (event.target as HTMLImageElement).dataset.message!
+    );
+    const webWhatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${message}`;
+    console.log(webWhatsappUrl);
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      open(webWhatsappUrl);
+    } else {
+      open(webWhatsappUrl, "__blank");
+    }
+  };
+
+  if (btnWhatsappContact) {
+    btnWhatsappContact.addEventListener("click", handleClick);
+  }
+</script>

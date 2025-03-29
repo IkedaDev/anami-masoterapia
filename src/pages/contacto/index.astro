@@ -1,0 +1,72 @@
+---
+import ScheduleVisit from "@/components/ScheduleVisit.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import IMG_9 from "@/assets/images/massage-09-1.jpg";
+import IMG_HEADER from "@/assets/images/massage-23.jpg";
+import IMG_HEADER_3 from "@/assets/images/massage-17-1.jpg";
+import { Picture } from "astro:assets";
+---
+
+<MainLayout title="Anami Masoterapia">
+  <section
+    class="relative flex-row-reverse flex max-h-[400px] max-w-6xl mx-auto justify-between mb-0"
+  >
+    <div class="lg:w-1/2 flex items-center relative z-10 mx-auto mt-5">
+      <h1
+        class="mb-0 lg:mb-[100px] mt-7 lg:mt-0 title tracking-wider text-6xl lg:text-7xl text-left"
+      >
+        Contacto
+      </h1>
+    </div>
+
+    <Picture
+      src={IMG_HEADER}
+      class="h-full object-contain relative z-10 hidden lg:inline-block"
+      alt="Contacto Anami Masoterapia"
+      width={780}
+    />
+    <Picture
+      class="absolute z-0 translate-x-[-50%] scale-x-[-1] left-1/2 max-w-1/2"
+      src={IMG_HEADER_3}
+      alt="Contacto Anami Masoterapia"
+      loading="lazy"
+      width={450}
+      formats={["webp", "jpeg"]}
+    />
+  </section>
+
+  <section
+    class="flex mx-auto max-w-5xl flex-wrap justify-center mt-15 relative z-10"
+  >
+    <div class="grow pb-20 lg:py-20 pl-10 flex flex-col gap-5">
+      <div>
+        <h6 class="title text-2xl font-bold">Correo</h6>
+        <p class="text">annetesepulvedal@gmail.com</p>
+      </div>
+      <div>
+        <h6 class="title text-2xl font-bold">WhatsApp</h6>
+        <p class="text">+56 9 8909 5115</p>
+      </div>
+      <div>
+        <h6 class="title text-2xl font-bold">Instagram</h6>
+        <p class="text">anami_masoterapia_</p>
+      </div>
+    </div>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1555.3800151647326!2d-72.57422521213107!3d-38.76920763900387!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9614d10eac77e61b%3A0x3510191cb8375d5e!2sNewuen%20Antu%20962%2C%20Padre%20las%20Casas%2C%20Padre%20Las%20Casas%2C%20Araucan%C3%ADa!5e0!3m2!1ses!2scl!4v1743201440248!5m2!1ses!2scl"
+      width="500"
+      height="450"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </section>
+
+  <ScheduleVisit />
+  <Picture
+    src={IMG_9}
+    alt="Naranjas relajantes"
+    height={400}
+    class="mx-auto w-7xl"
+  />
+</MainLayout>

@@ -1,11 +1,82 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import MainLayout from "@/layouts/MainLayout.astro";
+import IMG_HEADER_1 from "@/assets/images/massage-12.jpg";
+import IMG_HEADER_2 from "@/assets/images/massage-08.png";
+import IMG_HEADER_3 from "@/assets/images/massage-20.jpg";
+import IMG_9 from "@/assets/images/massage-09-1.jpg";
+import IMAGE_PROFILE from "src/assets/images/massage-13.jpg";
+import { Picture } from "astro:assets";
+import ScheduleVisit from "@/components/ScheduleVisit.astro";
+import ServiceShowcase from "@/components/ServiceShowcase.astro";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<MainLayout title="Anami Masoterapia">
+  <section
+    class="max-w-6xl mx-auto relative flex justify-between mb-[150px] xl:mb-[300px]"
+  >
+    <div class="mx-auto mt-10 lg:mt-0 lg:w-1/2 flex">
+      <h1
+        class="m-x-auto lg:mt-24 text-center md:text-start grow text-[3rem] lg:text-[6rem] select-none title -tracking-tighter leading-30 z-10"
+      >
+        Masoterapia <span class="hidden sm:inline">Temuco</span>
+      </h1>
+    </div>
+    <div class="absolute top-1/2 left-1/2 z-20 hidden lg:inline-block">
+      <Picture
+        src={IMG_HEADER_2}
+        alt="Masajes Hoja Relajante"
+        loading="lazy"
+        width={320}
+        formats={["webp", "jpeg"]}
+      />
+    </div>
+    <div class="relative hidden lg:inline-block">
+      <Picture
+        class="absolute top-0 right-14 scale-x-[-1]"
+        src={IMG_HEADER_3}
+        alt="Fondo Cálido"
+        loading="lazy"
+        width={450}
+        formats={["webp", "jpeg"]}
+      />
+      <Picture
+        class="relative z-10 right-10 xl:right-0"
+        src={IMG_HEADER_1}
+        alt="Masajes Naranja"
+        loading="lazy"
+        width={450}
+        formats={["webp", "jpeg"]}
+      />
+    </div>
+  </section>
+
+  <ServiceShowcase>
+    <div
+      class="px-4 min-w-[200px] pt-10 md:pt-20 md:pl-20 mb-10 relative z-10 2"
+    >
+      <h3 class="title text-5xl mb-5">Hola soy Anette!</h3>
+      <p class="text">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
+        nesciunt est odit sit impedit sed dolore, minima explicabo aspernatur!
+        Et eveniet deleniti eaque quaerat nemo reprehenderit optio cumque
+        incidunt voluptatibus.
+      </p>
+    </div>
+    <div class="w-1/2 min-w-[200px] flex justify-center items-center">
+      <Picture
+        src={IMAGE_PROFILE}
+        alt="Hola soy Anette, Masoterapeuta"
+        class="w-[200px] relative shadow z-10"
+      />
+    </div>
+  </ServiceShowcase>
+
+  <ScheduleVisit />
+
+  <Picture
+    src={IMG_9}
+    alt="Naranjas relajantes"
+    height={400}
+    class="mx-auto w-7xl"
+  />
+</MainLayout>

@@ -1,0 +1,87 @@
+---
+import IMG_PLAN_A_VISIT_BG from "@/assets/images/massage-17-1.jpg";
+import IMG_PLAN_A_VISIT from "@/assets/images/massage-15.jpg";
+import { Image, Picture } from "astro:assets";
+import { CONFIG } from "@/config/const";
+---
+
+<section class="mx-auto relative max-w-6xl mb-30 lg:mb-[200px]">
+  <Image
+    class="absolute center-img-absolute"
+    src={IMG_PLAN_A_VISIT_BG}
+    alt="Agendar visita masoterapia - fondo"
+    height={450}
+  />
+  <div
+    class="z-10 relative pt-20 flex flex-col gap-5 lg:gap-0 lg:flex-row justify-between px-20"
+  >
+    <h3 class="title text-6xl">Agendar Visita</h3>
+    <Picture
+      class="hidden lg:inline-block"
+      src={IMG_PLAN_A_VISIT}
+      width={480}
+      alt="Agenda tu visita para masaje"
+    />
+    <article
+      class="top-0 relative lg:absolute z-10 bg-secondary lg:top-[200px] max-w-[600px] pb-4 shadow"
+    >
+      <p
+        class="px-5 md:px-20 py-15 md:py-20 text leading-9 lg:pr-20 lg:pl-40 lg:pb-10 lg:pt-20 visit-me-info"
+      >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis eos
+        quo maxime voluptates, aperiam sit vitae officiis harum illum sapiente?
+        Incidunt dolorum eum magnam dolorem minus, saepe aspernatur recusandae
+        omnis.
+      </p>
+      <button
+        type="button"
+        id="btn-schedule-visit"
+        class="btn ml-20"
+        data-phone={CONFIG.phone}
+        data-message={CONFIG.whatsAppText}>Agendar cita</button
+      >
+    </article>
+  </div>
+</section>
+
+<style>
+  .center-img-absolute {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .visit-me-info::after {
+    content: "";
+    width: 150px;
+    height: 3px;
+    background: #ffd6a7;
+    position: absolute;
+    top: 40px;
+    border-radius: 5px;
+    left: 40px;
+  }
+</style>
+<script>
+  const btnWhatsappContact = document.getElementById(
+    "btn-schedule-visit"
+  ) as HTMLImageElement;
+
+  const handleClick = (event: Event) => {
+    const phone = (event.target as HTMLImageElement).dataset.phone;
+    const message = encodeURIComponent(
+      (event.target as HTMLImageElement).dataset.message!
+    );
+    const webWhatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${message}`;
+    console.log(webWhatsappUrl);
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      open(webWhatsappUrl);
+    } else {
+      open(webWhatsappUrl, "__blank");
+    }
+  };
+
+  if (btnWhatsappContact) {
+    btnWhatsappContact.addEventListener("click", handleClick);
+  }
+</script>

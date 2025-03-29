@@ -1,0 +1,82 @@
+---
+import { Image } from "astro:assets";
+import IMAGE_BG from "@/assets/images/massage-01.png";
+
+type Theme = "DEFAULT" | "HOTEL";
+
+interface Props {
+  theme?: Theme;
+}
+
+const { theme } = Astro.props;
+theme ?? "DEFAULT";
+
+const themes: { [key in Theme]: string } = {
+  DEFAULT: "gradient-bg-default",
+  HOTEL: "gradient-bg-hotel",
+};
+---
+
+<section class="min-h-[600px] h-auto mt-[100px]">
+  <div
+    class:list={[
+      `absolute h-[400px] gradient-bg-default w-full z-0 ${themes[theme!]}`,
+    ]}
+  >
+  </div>
+  <article
+    class="shadow min-h-[600px] max-w-[1000px] min-w-1/2 md:mx-auto article-bg relative top-[-100px] z-10 flex flex-wrap justify-center h-auto mx-2 pb-4 px-3"
+  >
+    <Image
+      src={IMAGE_BG}
+      width={IMAGE_BG.width}
+      alt="Fondo de servicios masoterapia"
+      class="absolute z-0"
+    />
+    <slot />
+  </article>
+</section>
+<style>
+  .gradient-bg-default {
+    background: rgb(245, 205, 194);
+    background: -moz-linear-gradient(
+      90deg,
+      rgba(245, 205, 194, 1) 0%,
+      rgba(174, 71, 51, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+      90deg,
+      rgba(245, 205, 194, 1) 0%,
+      rgba(174, 71, 51, 1) 100%
+    );
+    background: linear-gradient(
+      90deg,
+      rgba(245, 205, 194, 1) 0%,
+      rgba(174, 71, 51, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f5cdc2",endColorstr="#ae4733",GradientType=1);
+  }
+  .gradient-bg-hotel {
+    background: rgb(117, 195, 244);
+    background: -moz-linear-gradient(
+      90deg,
+      rgba(117, 195, 244, 1) 0%,
+      rgba(0, 74, 173, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+      90deg,
+      rgba(117, 195, 244, 1) 0%,
+      rgba(0, 74, 173, 1) 100%
+    );
+    background: linear-gradient(
+      90deg,
+      rgba(117, 195, 244, 1) 0%,
+      rgba(0, 74, 173, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#75c3f4",endColorstr="#004aad",GradientType=1);
+  }
+
+  .article-bg {
+    background-color: rgb(255 243 237 / 91%);
+  }
+</style>

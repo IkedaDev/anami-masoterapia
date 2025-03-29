@@ -1,0 +1,37 @@
+---
+import { Picture } from "astro:assets";
+
+import IMG_4 from "@/assets/images/p2-s2-1.jpeg";
+---
+
+<section class="mt-0 md:mt-40 max-w-6xl lg:mx-auto relative mb-[10rem] mx-2">
+  <Picture
+    class="img-4 scale-x-[-1] h-[1000px] object-contain object-top"
+    src={IMG_4}
+    width={640}
+    loading="lazy"
+    formats={["webp", "jpeg"]}
+    alt="Reseñas Masoterapia"
+  />
+  <div
+    class="main-card-second-section z-20 bg-white mx-auto relative lg:w-[660px] min-h-[1000px] lg:absolute top-[3rem] left-[29rem] shadow pb-5"
+  >
+    <slot />
+  </div>
+</section>
+
+<style>
+  @media screen and (max-width: 1180px) {
+    .img-4 {
+      display: none;
+    }
+
+    .main-card-second-section {
+      position: relative;
+      top: 0;
+      left: 0;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+</style>

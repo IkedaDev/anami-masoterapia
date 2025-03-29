@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@import "hamburgers/dist/hamburgers.min.css";
+@import "./fonts.css";
+
+:root {
+  --primary-color: #e4cdc5;
+  --secondary-color: #fffbf5;
+}
+body {
+  font-family: "Abel", "Poppins", sans-serif;
+  max-width: 100vw;
+}
+.f-poppins {
+  font-family: "Poppins", sans-serif;
+}
+.btn {
+  border: 2px solid #ac7c3d;
+  color: #3b3b3b;
+  background: transparent;
+  padding: 8px 16px;
+  font-size: 1.2rem;
+}
+
+.shadow {
+  box-shadow: 0px 70px 80px 0px rgba(12, 2, 2, 0.1);
+}
+.btn:hover {
+  cursor: pointer;
+}
+.text-primary {
+  color: var(--primary-color);
+}
+.text-secondary {
+  color: var(--secondary-color);
+}
+.bg-primary {
+  background: var(--primary-color);
+}
+.bg-secondary {
+  background: var(--secondary-color);
+}
+.text {
+  font-family: "Abel", "Poppins", sans-serif;
+  color: #333;
+  font-size: 1.3rem;
+}
+.title {
+  font-family: "Abel", "Poppins", sans-serif;
+  color: #333;
+}

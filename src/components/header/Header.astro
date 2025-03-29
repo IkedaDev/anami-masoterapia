@@ -1,0 +1,63 @@
+---
+import type { MenuItem } from "@/interfaces";
+import ResponsiveMenu from "./ResponsiveMenu/ResponsiveMenu";
+
+const menuItems: MenuItem[] = [
+  { label: "Inicio", link: "/" },
+  { label: "Servicios", link: "/servicios" },
+  { label: "Hotel", link: "/hotel" },
+  { label: "Contacto", link: "/contacto" },
+];
+---
+
+<header
+  class="bg-white f-poppins p-[40px] h-[80px] flex items-center justify-between fixed w-[100%] z-50"
+>
+  <h1 class="font-medium text-3xl sm:text-2xl">
+    <a href="/">Anami <span class="hidden sm:inline">Masoterapia</span></a>
+  </h1>
+  <nav class="sm:flex gap-[22px] font-medium hidden">
+    {
+      menuItems.map(({ label, link }) => (
+        <span class="">
+          <a href={link}>{label}</a>
+        </span>
+      ))
+    }
+  </nav>
+  <ResponsiveMenu client:load menuItems={menuItems} />
+</header>
+<div class="w-[100%] h-[80px]"></div>
+
+<script>
+  // const btn$ = document.getElementById("menu-btn") as HTMLButtonElement;
+  // const respMenu$ = document.querySelector(".responsive-menu") as HTMLElement;
+
+  // btn$.addEventListener("click", () => {
+  //   console.log("1");
+  //   btn$.classList.toggle("is-active");
+  //   respMenu$.classList.toggle("is-active-responsive-menu");
+  // });
+  // document.addEventListener("click", (event: MouseEvent) => {
+  //   if (!event.target) return;
+  //   if (
+  //     !respMenu$.contains(event.target as Node) &&
+  //     !btn$.contains(event.target as Node)
+  //   ) {
+  //     btn$.classList.toggle("is-active");
+  //     respMenu$.classList.toggle("is-active-responsive-menu");
+  //   }
+  // });
+</script>
+
+<style>
+  header {
+    box-shadow: 0 0 30px rgba(7, 51, 84, 0.17) !important;
+  }
+  span.menu-item {
+    transition: 0.3s cubic-bezier(0.39, 0.575, 0.565, 1) color;
+  }
+  span.menu-item:hover {
+    color: var(--primary-color);
+  }
+</style>

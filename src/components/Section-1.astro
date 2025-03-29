@@ -1,0 +1,78 @@
+---
+import { Picture } from "astro:assets";
+import IMAGE from "@/assets/images/p3-s3-1.jpeg";
+import ICON1 from "@/assets/images/massage-therapy-icon-010.png";
+import ICON2 from "@/assets/images/massage-therapy-icon-06.png";
+import ICON3 from "@/assets/images/massage-therapy-icon-02.png";
+---
+
+<section class="mx-2 md:mx-4 bg-[#f7f7f7] mt-[80px] px-20 pb-10">
+  <div class="flex flex-wrap justify-center max-w-3/4 mx-auto gap-x-10">
+    <div
+      class="min-w-[300px] max-w-[35vw] flex justify-center translate-y-[-80px]"
+    >
+      <Picture
+        class="object-cover relative max-h-[400px]"
+        src={IMAGE}
+        width={600}
+        alt="Servicios de masaje Hotel Tierra del Sur"
+      />
+    </div>
+    <div class="w-[500px] mb-20">
+      <h2
+        class="title-section title text-6xl tracking-wider mb-5 text-center md:text-start"
+      >
+        Servicios
+      </h2>
+      <p class="text text-center md:text-start">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima
+        atque porro voluptatem dolorum.
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-wrap mx-auto justify-center gap-10">
+    <div class="justify-center flex flex-col items-center gap-2">
+      <Picture
+        src={ICON1}
+        alt="Sauna, Hotel Tierra del Sur"
+        width={100}
+        height={100}
+      />
+      <h6 class="tracking-wider text-xl text-[#8f5f25]">Basic</h6>
+      <p class="text-sm max-w-2/3 text-center">
+        Lorem ipsum dolor sit amet consectetur adipisicing.
+      </p>
+    </div>
+    <div class="justify-center flex flex-col items-center gap-2">
+      <Picture
+        src={ICON2}
+        alt="Sauna, Hotel Tierra del Sur"
+        width={100}
+        height={100}
+      />
+      <h6 class="tracking-wider text-xl text-[#8f5f25]">Basic</h6>
+      <p class="text-sm max-w-2/3 text-center">
+        Lorem ipsum dolor sit amet consectetur adipisicing.
+      </p>
+    </div>
+    <div class="justify-center flex flex-col items-center gap-2">
+      <Picture
+        src={ICON3}
+        alt="Sauna, Hotel Tierra del Sur"
+        width={100}
+        height={100}
+      />
+      <h6 class="tracking-wider text-xl text-[#8f5f25]">Basic</h6>
+      <p class="text-sm max-w-2/3 text-center">
+        Lorem ipsum dolor sit amet consectetur adipisicing.
+      </p>
+    </div>
+  </div>
+</section>
+<style>
+  @media screen and (min-width: 1735px) {
+    .title-section {
+      margin-top: 50px;
+    }
+  }
+</style>
