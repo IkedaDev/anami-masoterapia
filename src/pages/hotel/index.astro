@@ -38,9 +38,20 @@ import Section1 from "@/components/Section-1.astro";
       formats={["webp", "jpeg"]}
     />
   </section>
-  <ServiceShowcase />
+  <ServiceShowcase>
+    <article
+      class="flex justify-center items-center relative z-10 px-5 py-5 text-2xl"
+    >
+      <div class="w-1/2">
+        En el Hotel Tierra del Sur, te ofrezco un servicio de masajes diseñado
+        para brindarte relajación y bienestar. En nuestro exclusivo espacio de
+        baños turcos y sauna para hombres, podrás liberar el estrés, mejorar la
+        circulación y eliminar toxinas, mientras disfrutas de un momento de
+        descanso y renovación
+      </div>
+    </article>
+  </ServiceShowcase>
   <Section1 />
-  <ScheduleVisit />
   <Picture
     src={IMG_9}
     alt="Naranjas relajantes"

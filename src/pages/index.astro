@@ -1,10 +1,10 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
-import IMG_HEADER_1 from "@/assets/images/massage-12.jpg";
+import IMG_HEADER_1 from "@/assets/images/decoracion-1.png";
 import IMG_HEADER_2 from "@/assets/images/massage-08.png";
 import IMG_HEADER_3 from "@/assets/images/massage-20.jpg";
-import IMG_9 from "@/assets/images/massage-09-1.jpg";
-import IMAGE_PROFILE from "src/assets/images/massage-13.jpg";
+import IMG_9 from "@/assets/images/hands.png";
+import IMAGE_PROFILE from "src/assets/images/me.jpg";
 import { Picture } from "astro:assets";
 import ScheduleVisit from "@/components/ScheduleVisit.astro";
 import ServiceShowcase from "@/components/ServiceShowcase.astro";
@@ -40,10 +40,9 @@ import ServiceShowcase from "@/components/ServiceShowcase.astro";
         formats={["webp", "jpeg"]}
       />
       <Picture
-        class="relative z-10 right-10 xl:right-0"
+        class="relative z-10 right-10 xl:right-0 max-h-[500px] object-contain"
         src={IMG_HEADER_1}
         alt="Masajes Naranja"
-        loading="lazy"
         width={450}
         formats={["webp", "jpeg"]}
       />
@@ -56,10 +55,11 @@ import ServiceShowcase from "@/components/ServiceShowcase.astro";
     >
       <h3 class="title text-5xl mb-5">Hola soy Anette!</h3>
       <p class="text">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-        nesciunt est odit sit impedit sed dolore, minima explicabo aspernatur!
-        Et eveniet deleniti eaque quaerat nemo reprehenderit optio cumque
-        incidunt voluptatibus.
+        ¡Hola! Soy Anette Lagos, masoterapeuta con 3 años de experiencia. Desde
+        siempre, el masaje ha sido algo instintivo para mí, y hoy es mi pasión.
+        Me especializo en masaje descontracturante, pero también ofrezco masajes
+        de relajación y bienestar, adaptando cada sesión a tus necesidades para
+        ayudarte a liberar tensiones y recuperar el equilibrio.
       </p>
     </div>
     <div class="w-1/2 min-w-[200px] flex justify-center items-center">
@@ -71,12 +71,18 @@ import ServiceShowcase from "@/components/ServiceShowcase.astro";
     </div>
   </ServiceShowcase>
 
-  <ScheduleVisit />
+  <ScheduleVisit>
+    Agenda tu masaje de forma fácil y rápida. Contáctame para reservar tu sesión
+    y disfrutar de un momento de relajación y bienestar. Elige el tratamiento
+    que mejor se adapte a ti y cuida tu cuerpo como se merece
+  </ScheduleVisit>
 
-  <Picture
-    src={IMG_9}
-    alt="Naranjas relajantes"
-    height={400}
-    class="mx-auto w-7xl"
-  />
+  <section class="w-full max-w-6xl mx-auto flex justify-end">
+    <Picture
+      src={IMG_9}
+      alt="Naranjas relajantes"
+      height={300}
+      class="mx-auto"
+    />
+  </section>
 </MainLayout>

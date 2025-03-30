@@ -1,6 +1,6 @@
 ---
 import IMG_PLAN_A_VISIT_BG from "@/assets/images/massage-17-1.jpg";
-import IMG_PLAN_A_VISIT from "@/assets/images/massage-15.jpg";
+import IMG_PLAN_A_VISIT from "@/assets/images/agendar-visita.jpg";
 import { Image, Picture } from "astro:assets";
 import { CONFIG } from "@/config/const";
 ---
@@ -17,9 +17,10 @@ import { CONFIG } from "@/config/const";
   >
     <h3 class="title text-6xl">Agendar Visita</h3>
     <Picture
-      class="hidden lg:inline-block"
+      class="hidden lg:inline-block max-h-[400px]"
       src={IMG_PLAN_A_VISIT}
       width={480}
+      height={400}
       alt="Agenda tu visita para masaje"
     />
     <article
@@ -28,10 +29,7 @@ import { CONFIG } from "@/config/const";
       <p
         class="px-5 md:px-20 py-15 md:py-20 text leading-9 lg:pr-20 lg:pl-40 lg:pb-10 lg:pt-20 visit-me-info"
       >
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis eos
-        quo maxime voluptates, aperiam sit vitae officiis harum illum sapiente?
-        Incidunt dolorum eum magnam dolorem minus, saepe aspernatur recusandae
-        omnis.
+        <slot />
       </p>
       <button
         type="button"

@@ -13,14 +13,13 @@ const services: Service[] = [
   { name: "Masaje Cráneo Facial", duration: "35 min", price: 10000 },
   { name: "Masaje Cuerpo Completo", duration: "60 min", price: 20000 },
   { name: "Drenaje Linfático", duration: "45 min", price: 14000 },
-  { name: "Masaje Descontracturante", duration: "40 min", price: 17000 },
   { name: "Masaje Podal", duration: "30 min", price: 10000 },
   { name: "Limpieza Facial", duration: "60 min", price: 20000 },
 ];
 ---
 
 <MainLayout title="Anami Masoterapia">
-  <section class="mt-7 relative hidden md:flex md:mx-2 query-mb">
+  <!-- <section class="mt-7 relative hidden md:flex md:mx-2 query-mb">
     <Picture
       class="max-w-1/2 xl:max-w-1/3 absolute center-img-absolute"
       formats={["webp", "jpeg", "png"]}
@@ -46,6 +45,9 @@ const services: Service[] = [
       </h2>
     </div>
     <div class="h-screen"></div>
+  </section> -->
+  <section class="mt-10 relative query-mb max-w-6xl mx-auto">
+    <h1 class="text-center text-7xl title">Servicios</h1>
   </section>
   <section class="md:hidden my-10 md:mx-2">
     <h1 class="title text-center text-6xl">Servicios</h1>
@@ -72,12 +74,16 @@ const services: Service[] = [
       </div>
     </div>
   </PricesSection>
-  <ScheduleVisit />
+  <ScheduleVisit>
+    Agenda tu masaje en mi home studio y disfruta de un ambiente tranquilo y
+    acogedor. Contáctame para reservar tu sesión y elige el tratamiento perfecto
+    para ti. Relájate, renueva tu energía y cuida tu bienestar
+  </ScheduleVisit>
   <div class="my-20 h-1"></div>
 </MainLayout>
 
 <style>
-  @media screen and (min-width: 900px) {
+  /* @media screen and (min-width: 900px) {
     .query-mb {
       margin-bottom: 100px;
     }
@@ -96,7 +102,7 @@ const services: Service[] = [
     .query-mb {
       margin-bottom: 10%;
     }
-  }
+  } */
   .center-img-absolute {
     left: 50%;
     transform: translateX(-50%);

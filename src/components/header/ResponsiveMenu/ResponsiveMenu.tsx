@@ -10,7 +10,6 @@ const ResponsiveMenu: React.FC<Props> = ({ menuItems }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
-    console.log("|");
     btnRef.current?.classList.toggle("is-active");
     menuRef.current?.classList.toggle("is-active-responsive-menu");
   };

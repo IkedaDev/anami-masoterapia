@@ -1,8 +1,7 @@
 ---
-import ScheduleVisit from "@/components/ScheduleVisit.astro";
 import MainLayout from "@/layouts/MainLayout.astro";
 import IMG_9 from "@/assets/images/massage-09-1.jpg";
-import IMG_HEADER from "@/assets/images/massage-23.jpg";
+import IMG_HEADER from "@/assets/images/marca_n.jpg";
 import IMG_HEADER_3 from "@/assets/images/massage-17-1.jpg";
 import { Picture } from "astro:assets";
 ---
@@ -21,9 +20,9 @@ import { Picture } from "astro:assets";
 
     <Picture
       src={IMG_HEADER}
-      class="h-full object-contain relative z-10 hidden lg:inline-block"
+      class="h-full object-contain relative z-10 hidden lg:flex justify-end"
       alt="Contacto Anami Masoterapia"
-      width={780}
+      width={600}
     />
     <Picture
       class="absolute z-0 translate-x-[-50%] scale-x-[-1] left-1/2 max-w-1/2"
@@ -36,7 +35,7 @@ import { Picture } from "astro:assets";
   </section>
 
   <section
-    class="flex mx-auto max-w-5xl flex-wrap justify-center mt-15 relative z-10"
+    class="flex mx-auto max-w-5xl flex-wrap justify-center mt-15 relative z-10 mb-10"
   >
     <div class="grow pb-20 lg:py-20 pl-10 flex flex-col gap-5">
       <div>
@@ -62,7 +61,7 @@ import { Picture } from "astro:assets";
       referrerpolicy="no-referrer-when-downgrade"></iframe>
   </section>
 
-  <ScheduleVisit />
+  <!-- <ScheduleVisit /> -->
   <Picture
     src={IMG_9}
     alt="Naranjas relajantes"

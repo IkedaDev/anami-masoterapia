@@ -5,6 +5,7 @@ import "../styles/global.css";
 import Footer from "@/components/Footer.astro";
 import { CONFIG } from "@/config/const";
 import { ClientRouter } from "astro:transitions";
+import WhatsAppButton from "@/components/whatsapp-button/WhatsAppButton";
 
 interface Props {
   title: string;
@@ -60,43 +61,7 @@ const { title } = Astro.props;
     <main class="">
       <slot />
     </main>
-    <img
-      class="fixed bottom-5 right-5 hover:drop-shadow-2xl transition-all cursor-pointer z-30"
-      src="/WhatsApp.svg"
-      alt="WhatsApp Anami Masoterapia"
-      width="60"
-      height="60"
-      data-phone={CONFIG.phone}
-      data-message={CONFIG.whatsAppText}
-      id="btn-whatsapp-contact"
-    />
-
+    <WhatsAppButton client:load />
     <Footer />
   </body>
 </html>
-
-<script>
-  const btnWhatsappContact = document.getElementById(
-    "btn-whatsapp-contact"
-  ) as HTMLImageElement;
-
-  const handleClick = (event: Event) => {
-    const phone = (event.target as HTMLImageElement).dataset.phone;
-    const message = encodeURIComponent(
-      (event.target as HTMLImageElement).dataset.message!
-    );
-    const webWhatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${message}`;
-    console.log(webWhatsappUrl);
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-    if (isMobile) {
-      open(webWhatsappUrl);
-    } else {
-      open(webWhatsappUrl, "__blank");
-    }
-  };
-
-  if (btnWhatsappContact) {
-    btnWhatsappContact.addEventListener("click", handleClick);
-  }
-</script>
