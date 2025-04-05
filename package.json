@@ -2,6 +2,7 @@
   "name": "anami-masoterapia",
   "version": "0.0.1",
   "dependencies": {
+    "@astrojs/cloudflare": "^12.4.0",
     "@astrojs/react": "^4.2.2",
     "@tailwindcss/vite": "^4.0.17",
     "@types/react": "^19.0.12",
