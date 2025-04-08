@@ -1,7 +1,8 @@
 import { defineConfig } from "astro/config";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
-
+import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
 
 import cloudflare from "@astrojs/cloudflare";
@@ -17,6 +18,6 @@ export default defineConfig({
     },
   },
 
-  integrations: [react()],
+  integrations: [mdx(), sitemap(), react()],
   adapter: cloudflare(),
 });
