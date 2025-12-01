@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// Obtener todos los posts y ordenarlos por fecha (más nuevo primero)
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const title = "Blog & Novedades";
+const description = "Consejos de bienestar, salud y noticias de Anami Masoterapia.";
+---
+
+<Layout title={title} description={description}>
+    <!-- Encabezado simple -->
+    <section class="blog-header">
+        <div class="container">
+            <h1>{title}</h1>
+            <p>Consejos para tu bienestar</p>
+        </div>
+    </section>
+
+    <section class="blog-grid">
+        <!-- Grid de Artículos -->
+            {posts.map((post) => (
+                <anami-blog-card
+                    title={post.data.title}
+                    excerpt={post.data.description}
+                    category={post.data.category}
+                    date={post.data.pubDate.toLocaleDateString('es-CL', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    image={post.data.image}
+                    href={`/blog/${post.slug}`} 
+                ></anami-blog-card>
+            ))}
+    </section>
+</Layout>
+
+<style>
+    .blog-header {
+        text-align: center;
+        padding: 4rem 1rem;
+        background-color: var(--anami-brand-blob, #F9EBE7);
+        margin-bottom: 3rem;
+    }
+    .blog-header h1 {
+        font-size: 2.5rem;
+        color: var(--anami-text-main, #4A403A);
+        margin-bottom: 0.5rem;
+    }
+    .blog-header p {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--anami-brand-primary, #C47F6B);
+        font-weight: 500;
+    }
+
+    .blog-section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+    .blog-grid {
+        display: grid;
+        padding: 4rem 2rem;
+        /* Tarjetas más anchas (350px min) para estilo editorial */
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 3rem; /* Espaciado generoso */
+        margin: 0 auto; /* Centrado horizontal */
+        max-width: 1300px;
+    }
+
+    @media (max-width: 768px) {
+        .blog-grid {
+            grid-template-columns: 1fr; /* Una columna en móvil */
+            gap: 2rem;
+        }
+    }
+</style>

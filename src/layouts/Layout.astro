@@ -13,10 +13,11 @@ interface Props {
 const { title, description } = Astro.props;
 
 const navLinks = JSON.stringify([
-    { text: "Inicio", href: "#inicio" },
-    { text: "Servicios", href: "#servicios" },
-    { text: "Hotel", href: "#hotel" },
-    { text: "Contacto", href: "#contacto" }
+    { text: "Inicio", href: "/#inicio" },
+    { text: "Servicios", href: "/#servicios" },
+    { text: "Hotel", href: "/#hotel" },
+    { text: "Contacto", href: "/#contacto" },
+    { text: "Blog", href: "/blog" },
 ]);
 ---
 

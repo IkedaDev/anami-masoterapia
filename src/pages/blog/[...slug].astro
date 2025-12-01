@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// 1. Generar rutas estáticas para cada post
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post,
+	}));
+}
+
+// 2. Obtener datos del post actual
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+    <article class="post-article">
+        <!-- Hero del Post -->
+        <div class="post-hero" style={`background-image: url(${post.data.image})`}>
+            <div class="overlay"></div>
+            <div class="hero-content">
+                <span class="category">{post.data.category}</span>
+                <h1>{post.data.title}</h1>
+                <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+            </div>
+        </div>
+
+        <!-- Contenido Markdown -->
+        <div class="content-wrapper">
+            <div class="markdown-body">
+                <Content />
+            </div>
+            
+            <div class="share-section">
+                <a href="/blog" class="back-link">← Volver al Blog</a>
+            </div>
+        </div>
+    </article>
+</Layout>
+
+<style>
+    /* Estilos específicos del artículo */
+    .post-hero {
+        height: 60vh;
+        min-height: 400px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+    
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        padding-bottom: 4rem;
+        max-width: 800px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .category {
+        background: var(--anami-brand-primary, #C47F6B);
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+
+    h1 {
+        font-size: 3rem;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
+
+    /* Contenedor de lectura */
+    .content-wrapper {
+        max-width: 800px;
+        margin: -3rem auto 0; /* Efecto flotante sobre el hero */
+        background: var(--anami-bg-surface, white);
+        padding: 3rem;
+        border-radius: 24px 24px 0 0;
+        position: relative;
+        z-index: 3;
+    }
+
+    /* Estilos básicos para el Markdown renderizado */
+    .markdown-body {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--anami-text-main, #333);
+    }
+    
+    .markdown-body h2 {
+        color: var(--anami-brand-primary, #C47F6B);
+        margin-top: 2rem;
+        font-size: 1.8rem;
+    }
+    
+    .markdown-body p {
+        margin-bottom: 1.5rem;
+    }
+
+    .markdown-body blockquote {
+        border-left: 4px solid var(--anami-brand-primary, #C47F6B);
+        padding-left: 1rem;
+        font-style: italic;
+        color: var(--anami-text-light, #777);
+        margin: 2rem 0;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 3rem;
+        color: var(--anami-brand-primary, #C47F6B);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        .content-wrapper { padding: 2rem 1.5rem; margin-top: 0; border-radius: 0; }
+        .post-hero { height: 50vh; }
+    }
+</style>
