@@ -1,0 +1,70 @@
+name: Build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-dephs: 0
+
+      - name: Git Semantic Version
+        uses: PaulHatch/semantic-version@v4.0.3
+        with:
+          major_pattern: "major:"
+          minor_pattern: "feat:"
+          format: "${major}.${minor}.${patch}-prerelease${increment}"
+        id: version
+
+      - name: Docker Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+
+      - name: Set up Docker Buildx
+        run: |
+          docker buildx create --use
+
+      - name: Build Docker Image
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          docker buildx build --platform linux/amd64,linux/arm64/v8 -t ikedaharket/anami-masoterapia:$NEW_VERSION --push .
+          docker buildx build --platform linux/amd64,linux/arm64/v8 -t ikedaharket/anami-masoterapia:latest --push .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy Application
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+
+          if [ $(docker ps -q -f name=anami-masoterapia) ]; then
+            docker stop anami-masoterapia || true
+            docker rm anami-masoterapia || true
+          fi
+
+          if [ $(docker images -q ikedaharket/anami-masoterapia:latest) ]; then
+            docker rmi ikedaharket/anami-masoterapia:latest || true
+          fi
+
+          docker run -d --restart=always --name anami-masoterapia -p 30002:80 ikedaharket/anami-masoterapia:latest
+          ENDSSH

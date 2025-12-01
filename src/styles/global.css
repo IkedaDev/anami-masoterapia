@@ -1,0 +1,17 @@
+/* Reset básico y configuración global */
+html {
+  scroll-behavior: smooth; /* Para que los enlaces # se deslicen suavemente */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* Usamos las variables de tu librería para consistencia */
+  background-color: var(--anami-bg-body, #fffcfa);
+  font-family: "Outfit", sans-serif;
+}
+
+/* Ajuste de scroll para que el navbar sticky no tape los títulos */
+div[id] {
+  scroll-margin-top: 100px;
+}

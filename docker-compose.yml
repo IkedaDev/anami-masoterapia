@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  anami-web:
+    container_name: anami-masoterapia
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80" # Mapea el puerto 80 del contenedor al 8080 de tu máquina
+    restart: always
+    environment:
+      - NODE_ENV=production

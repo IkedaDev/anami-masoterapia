@@ -1,0 +1,55 @@
+---
+import SeoHead from '../components/SeoHead.astro';
+
+// ✅ CORRECTO: Los estilos CSS se procesan en el servidor (build time)
+import '@ikedadev/anami-ui/src/styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+    description: string;
+}
+
+const { title, description } = Astro.props;
+
+const navLinks = JSON.stringify([
+    { text: "Inicio", href: "#inicio" },
+    { text: "Servicios", href: "#servicios" },
+    { text: "Hotel", href: "#hotel" },
+    { text: "Contacto", href: "#contacto" }
+]);
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+        <SeoHead title={title} description={description} />
+	</head>
+	<body>
+        <!-- Navbar Global -->
+        <anami-navbar 
+            logo="Anami Masoterapia"
+            links={navLinks}
+        ></anami-navbar>
+
+        <!-- 
+            ✅ MEJORA SEO: Envolvemos el contenido en <main>.
+            Esto le dice a Google: "Aquí está el contenido importante",
+            independientemente de si los componentes han cargado o no.
+        -->
+        <main>
+		    <slot />
+        </main>
+
+        <!-- Footer Global -->
+        <anami-footer text="© 2025 Anami Masoterapia. Temuco, Chile."></anami-footer>
+        <anami-whatsapp phone="56912345678"></anami-whatsapp>
+
+        <!-- 
+           Script del Cliente: Hidrata los componentes en el navegador
+        -->
+        <script>
+            import '@ikedadev/anami-ui';
+        </script>
+	</body>
+</html>

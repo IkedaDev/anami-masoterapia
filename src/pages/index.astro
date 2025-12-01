@@ -1,16 +1,107 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import { servicesData, hotelFeatures, contactInfo } from '../utils/data';
 
+// Preparamos los JSON strings para pasarlos a los Web Components
+const servicesJson = JSON.stringify(servicesData);
+const hotelJson = JSON.stringify(hotelFeatures);
 ---
+<Layout 
+    title="Inicio" 
+    description="Masoterapia profesional en Temuco. Masajes descontracturantes, de relajación y servicios exclusivos en Hotel Tierra del Sur."
+>
+    
+    <!-- Hero Section -->
+    <div id="inicio">
+        <anami-hero
+            title="Bienestar y equilibrio"
+            subtitle="Masoterapia profesional en Temuco. Un espacio diseñado para reconectar con tu cuerpo."
+            image-url="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        ></anami-hero>
+    </div>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+	<!-- Sección Sobre Mí (Bio) -->
+    <div id="bio">
+        <anami-bio
+            name="Hola, soy Anette"
+            subtitle="Masoterapeuta Certificada"
+            description="El masaje no es solo una técnica, es una forma de comunicación silenciosa. Con 3 años de experiencia, me dedico a crear espacios de pausa en un mundo acelerado, especializándome en aliviar la tensión crónica y restaurar la vitalidad."
+            image-url="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        ></anami-bio>
+    </div>
+
+    <!-- Sección de Servicios Generales -->
+    <div id="servicios">
+        <anami-service-card-grid 
+            services-json={servicesJson}
+        ></anami-service-card-grid>
+    </div>
+
+    
+
+	<!-- Sección de Hotel (Nuevo Componente) -->
+    <div id="hotel">
+        <anami-simple-section
+            title="Experiencia Tierra del Sur"
+            description="Complementa tu estadía con un masaje express. Sesiones diseñadas para revitalizar tu energía después de un día de turismo o spa. El complemento perfecto para tu descanso."
+            image-url="https://images.unsplash.com/photo-1540555700478-4be289fbecef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            features-json={hotelJson}
+        ></anami-simple-section>
+    </div>
+
+	<!-- Call to Action Principal -->
+    <anami-cta-card
+        title="Reserva tu momento"
+        text="Tu cuerpo es tu hogar. Agenda una sesión personalizada y descubre los beneficios de la masoterapia profesional."
+        button-text="Agendar Visita"
+        image-url="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    ></anami-cta-card>
+
+    <!-- Sección de Contacto -->
+    <div id="contacto">
+        <anami-contact-section
+            phone={contactInfo.phone}
+            email={contactInfo.email}
+            instagram={contactInfo.instagram}
+            address={contactInfo.address}
+        ></anami-contact-section>
+    </div>
+
+</Layout>
+
+<script>
+    // LÓGICA DEL CLIENTE
+    // Este script se ejecuta en el navegador del usuario para manejar los eventos personalizados.
+
+    // 1. Manejar clicks en los servicios (Redirigir a WhatsApp)
+    const serviceGrid = document.querySelector('anami-service-card-grid');
+    
+    if (serviceGrid) {
+        serviceGrid.addEventListener('service-selected', (event) => {
+            // TypeScript: aserción de tipo para acceder a 'detail' si es necesario, 
+            // o simplemente usar event.detail en JS estándar.
+            const service = event.detail;
+            
+            console.log('Cliente interesando en:', service.name);
+            
+            // Número limpio para la API de WhatsApp (sin espacios ni símbolos)
+            const phone = "56912345678"; 
+            const message = `Hola Anette, me interesa agendar un *${service.name}* que vi en tu web.`;
+            
+            // Abrir WhatsApp en nueva pestaña
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        });
+    }
+    
+    // 2. Manejar click en el CTA "Agendar Visita" (Scroll suave al contacto)
+    const ctaCard = document.querySelector('anami-cta-card');
+    
+    if (ctaCard) {
+        ctaCard.addEventListener('cta-card-click', () => {
+             const contactSection = document.getElementById('contacto');
+             if (contactSection) {
+                 contactSection.scrollIntoView({ behavior: 'smooth' });
+             }
+        });
+    }
+</script>

@@ -9,6 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "@ikedadev/anami-ui": "^1.1.0",
     "astro": "^5.16.3"
   }
 }
