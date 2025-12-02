@@ -13,42 +13,42 @@ const hotelJson = JSON.stringify(hotelFeatures);
 >
     
     <!-- Hero Section -->
-    <div id="inicio">
+    <section id="inicio">
         <anami-hero
             title="Bienestar y equilibrio"
             subtitle="Masoterapia profesional en Temuco y Padre las Casas. Un espacio diseñado para reconectar con tu cuerpo."
             image-url="https://i.imgur.com/G48cSaP.jpeg"
         ></anami-hero>
-    </div>
+    </section>
 
 	<!-- Sección Sobre Mí (Bio) -->
-    <div id="bio">
+    <section id="bio">
         <anami-bio
             name="Hola, soy Anette"
             subtitle="Masoterapeuta Certificada"
             description="El masaje no es solo una técnica, es una forma de comunicación silenciosa. Con 3 años de experiencia, me dedico a crear espacios de pausa en un mundo acelerado, especializándome en aliviar la tensión crónica y restaurar la vitalidad."
             image-url="https://raw.githubusercontent.com/IkedaDev/anami-masoterapia-old/refs/heads/main/src/assets/images/p2-s2-1.jpeg"
         ></anami-bio>
-    </div>
+    </section>
 
     <!-- Sección de Servicios Generales -->
-    <div id="servicios">
+    <section id="servicios">
         <anami-service-card-grid 
             services-json={servicesJson}
         ></anami-service-card-grid>
-    </div>
+    </section>
 
     
 
 	<!-- Sección de Hotel (Nuevo Componente) -->
-    <div id="hotel">
+    <section id="hotel">
         <anami-simple-section
             title="Experiencia Tierra del Sur"
             description="Complementa tu estadía con un masaje express. Sesiones diseñadas para revitalizar tu energía después de un día de turismo o spa. El complemento perfecto para tu descanso."
             image-url="https://raw.githubusercontent.com/IkedaDev/anami-masoterapia-old/refs/heads/main/src/assets/images/p3-s1-1.jpg"
             features-json={hotelJson}
         ></anami-simple-section>
-    </div>
+    </section>
 
 	<!-- Call to Action Principal -->
     <anami-cta-card
@@ -59,14 +59,14 @@ const hotelJson = JSON.stringify(hotelFeatures);
     ></anami-cta-card>
 
     <!-- Sección de Contacto -->
-    <div id="contacto">
+    <section id="contacto">
         <anami-contact-section
             phone={contactInfo.phone}
             email={contactInfo.email}
             instagram={contactInfo.instagram}
             address={contactInfo.address}
         ></anami-contact-section>
-    </div>
+    </section>
 
 </Layout>
 

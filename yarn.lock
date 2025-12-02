@@ -237,10 +237,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.25.12.tgz#9bdad8176be7811ad148d1f8772359041f46c6c5"
   integrity sha512-alJC0uCZpTFrSL0CCDjcgleBXPnCrEAhTBILpeAp7M/OFgoqtAetfBzX0xM00MUsVVPpVjlPuMbREqnZCXaTnA==
 
-"@ikedadev/anami-ui@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@ikedadev/anami-ui/-/anami-ui-1.2.2.tgz#6f263bdffa6d64593b82f0db34804b6127471e97"
-  integrity sha512-2f0zhUs3bBkuvM2Am8i4qP1dwuReG1qj7o/dh6Ou8wxc3xvx8T0gkhKox4fbI4M2H0B6NQFE+GV/CPawgXOLBg==
+"@ikedadev/anami-ui@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@ikedadev/anami-ui/-/anami-ui-1.2.3.tgz#24647474cbc4eda06f50e920b72d58a2f672f7b5"
+  integrity sha512-uHJwjG5/vFEtrAxhoOGIizOLWHX7FGvz88oWE1UgvVkwOII/GKfGc3b/69Ch942LecmnAXiqZBEVzKfzhBPiXw==
 
 "@img/colour@^1.0.0":
   version "1.0.0"
