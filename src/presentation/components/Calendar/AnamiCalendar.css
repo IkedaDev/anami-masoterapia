@@ -54,7 +54,11 @@
   color: white;
 }
 
-/* Scroll Container para la tabla */
+/* --- VISTA DESKTOP --- */
+.calendar-view-desktop {
+  display: block;
+}
+
 .calendar-scroll {
   overflow-x: auto;
 }
@@ -68,6 +72,10 @@
   display: grid;
   grid-template-columns: 60px repeat(7, 1fr); /* 1 columna hora + 7 días */
   border-bottom: 1px solid #f0f0f0;
+}
+
+.header-row {
+  background-color: #fafafa;
 }
 
 /* Encabezados de Días */
@@ -175,4 +183,92 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* --- VISTA MÓVIL (Oculta por defecto) --- */
+.calendar-view-mobile {
+  display: none;
+  padding: 1rem;
+}
+
+.mobile-day-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.mobile-day-card.today {
+  border-color: var(--anami-brand-primary, #c47f6b);
+  box-shadow: 0 4px 12px rgba(196, 127, 107, 0.15);
+}
+
+.mobile-day-header {
+  background: #fafafa;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  color: var(--anami-text-main, #4a403a);
+  text-transform: capitalize;
+}
+
+.mobile-day-card.today .mobile-day-header {
+  background: var(--anami-brand-blob, #f9ebe7);
+  color: var(--anami-brand-primary, #c47f6b);
+}
+
+.mobile-day-body {
+  padding: 0.5rem;
+}
+
+.mobile-appointment-item {
+  background: var(--anami-brand-primary, #c47f6b);
+  color: white;
+  padding: 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-appt-time {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.mobile-appt-status {
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.mobile-empty-state {
+  padding: 1rem;
+  text-align: center;
+  color: var(--anami-text-light, #8c817c);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* --- MEDIA QUERY: SWITCH DE VISTAS --- */
+@media (max-width: 768px) {
+  .calendar-view-desktop {
+    display: none;
+  }
+  .calendar-view-mobile {
+    display: block;
+  }
+
+  .calendar-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .calendar-title {
+    font-size: 1.2rem;
+  }
 }

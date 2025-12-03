@@ -8,12 +8,11 @@ import {
   subWeeks,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { FirebaseAppointmentRepository } from "../../../infrastructure/repositories/FirebaseAppointmentRepository";
 
 // Importamos los estilos CSS normales
 import "./AnamiCalendar.css";
 
-// Instanciamos el repositorio
+import { FirebaseAppointmentRepository } from "../../../infrastructure/repositories/FirebaseAppointmentRepository";
 const repository = new FirebaseAppointmentRepository();
 
 const AnamiCalendar = () => {
@@ -64,75 +63,115 @@ const AnamiCalendar = () => {
         </h2>
         <div className="nav-group">
           <button onClick={prevWeek} className="nav-btn">
-            ← Anterior
+            ←
           </button>
           <button onClick={nextWeek} className="nav-btn">
-            Siguiente →
+            →
           </button>
         </div>
       </div>
 
-      {/* Grid Scrollable */}
-      <div className="calendar-scroll">
-        <div className="calendar-table-container">
-          {/* Encabezados (Días) */}
-          <div className="calendar-grid-row">
-            <div className="header-time-label">Hora</div>
-            {weekDays.map((day, i) => (
-              <div
-                key={i}
-                className={`day-header ${
-                  isSameDay(day, new Date()) ? "today" : ""
-                }`}
-              >
-                <span className="day-name">
-                  {format(day, "EEE", { locale: es })}
-                </span>
-                <span className="day-number">{format(day, "d")}</span>
-              </div>
-            ))}
-          </div>
+      {/* VISTA DESKTOP (Tabla Scrollable) */}
+      <div className="calendar-view-desktop">
+        <div className="calendar-scroll">
+          <div className="calendar-table-container">
+            {/* Encabezados (Días) */}
+            <div className="calendar-grid-row header-row">
+              <div className="header-time-label">Hora</div>
+              {weekDays.map((day, i) => (
+                <div
+                  key={i}
+                  className={`day-header ${
+                    isSameDay(day, new Date()) ? "today" : ""
+                  }`}
+                >
+                  <span className="day-name">
+                    {format(day, "EEE", { locale: es })}
+                  </span>
+                  <span className="day-number">{format(day, "d")}</span>
+                </div>
+              ))}
+            </div>
 
-          {/* Cuerpo (Horas) */}
-          <div className="calendar-body">
-            {loading && (
-              <div className="loading-overlay">
-                <span>Cargando citas...</span>
-              </div>
-            )}
+            {/* Cuerpo (Horas) */}
+            <div className="calendar-body">
+              {loading && (
+                <div className="loading-overlay">
+                  <span>Cargando citas...</span>
+                </div>
+              )}
 
-            {timeSlots.map((hour) => (
-              <div key={hour} className="calendar-grid-row time-row">
-                <div className="time-label">{hour}:00</div>
+              {timeSlots.map((hour) => (
+                <div key={hour} className="calendar-grid-row time-row">
+                  <div className="time-label">{hour}:00</div>
 
-                {weekDays.map((day, colIndex) => {
-                  const dayAppointments = appointments.filter(
-                    (appt) =>
-                      isSameDay(appt.start, day) &&
-                      appt.start.getHours() === hour
-                  );
+                  {weekDays.map((day, colIndex) => {
+                    const dayAppointments = appointments.filter(
+                      (appt) =>
+                        isSameDay(appt.start, day) &&
+                        appt.start.getHours() === hour
+                    );
 
-                  return (
-                    <div key={colIndex} className="day-column">
-                      {dayAppointments.map((appt) => (
-                        <div
-                          key={appt.id}
-                          className="appointment-chip"
-                          title={`${format(appt.start, "HH:mm")} - Reservado`}
-                        >
-                          <span className="appt-time">
-                            {format(appt.start, "HH:mm")}
-                          </span>
-                          <div className="appt-patient">Reservado</div>
-                        </div>
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
+                    return (
+                      <div key={colIndex} className="day-column">
+                        {dayAppointments.map((appt) => (
+                          <div
+                            key={appt.id}
+                            className="appointment-chip"
+                            title={`${format(appt.start, "HH:mm")} - Reservado`}
+                          >
+                            <span className="appt-time">
+                              {format(appt.start, "HH:mm")}
+                            </span>
+                            <div className="appt-patient">Reservado</div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* VISTA MÓVIL (Lista Vertical por Día) */}
+      <div className="calendar-view-mobile">
+        {weekDays.map((day, i) => (
+          <div
+            key={i}
+            className={`mobile-day-card ${
+              isSameDay(day, new Date()) ? "today" : ""
+            }`}
+          >
+            <div className="mobile-day-header">
+              <span className="mobile-day-name">
+                {format(day, "EEEE d", { locale: es })}
+              </span>
+            </div>
+            <div className="mobile-day-body">
+              {/* Filtrar citas para este día */}
+              {appointments.filter((appt) => isSameDay(appt.start, day))
+                .length > 0 ? (
+                appointments
+                  .filter((appt) => isSameDay(appt.start, day))
+                  .sort((a, b) => a.start - b.start)
+                  .map((appt) => (
+                    <div key={appt.id} className="mobile-appointment-item">
+                      <div className="mobile-appt-time">
+                        {format(appt.start, "HH:mm")} -{" "}
+                        {format(appt.end, "HH:mm")}
+                      </div>
+                      <div className="mobile-appt-status">Reservado</div>
+                    </div>
+                  ))
+              ) : (
+                <div className="mobile-empty-state">Sin citas agendadas</div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
