@@ -17,6 +17,7 @@ const navLinks = JSON.stringify([
     { text: "Servicios", href: "/#servicios" },
     { text: "Hotel", href: "/#hotel" },
     { text: "Contacto", href: "/#contacto" },
+    { text: "Agenda", href: "/agenda" },
     { text: "Blog", href: "/blog" },
 ]);
 ---
@@ -32,23 +33,12 @@ const navLinks = JSON.stringify([
             logo="Anami Masoterapia"
             links={navLinks}
         ></anami-navbar>
-
-        <!-- 
-            ✅ MEJORA SEO: Envolvemos el contenido en <main>.
-            Esto le dice a Google: "Aquí está el contenido importante",
-            independientemente de si los componentes han cargado o no.
-        -->
         <main>
 		    <slot />
         </main>
-
         <!-- Footer Global -->
         <anami-footer text="© 2025 Anami Masoterapia. Temuco, Chile."></anami-footer>
         <anami-whatsapp phone="56963564897"></anami-whatsapp>
-
-        <!-- 
-           Script del Cliente: Hidrata los componentes en el navegador
-        -->
         <script>
             import '@ikedadev/anami-ui';
         </script>

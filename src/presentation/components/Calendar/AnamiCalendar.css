@@ -1,0 +1,178 @@
+/* Contenedor Principal */
+.anami-calendar {
+  background-color: var(--anami-bg-surface, #ffffff);
+  border-radius: var(--anami-radius-lg, 24px);
+  box-shadow: var(
+    --anami-shadow-soft,
+    0 10px 40px -10px rgba(74, 64, 58, 0.08)
+  );
+  border: 1px solid var(--anami-brand-secondary, #e8d3cd);
+  overflow: hidden;
+  font-family: var(--anami-font-main, sans-serif);
+}
+
+/* Header */
+.calendar-header {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--anami-bg-body, #fffcfa);
+  border-bottom: 1px solid var(--anami-brand-secondary, #e8d3cd);
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  color: var(--anami-text-main, #4a403a);
+  font-weight: 300;
+  margin: 0;
+}
+
+.calendar-title span {
+  font-weight: 500;
+  color: var(--anami-brand-primary, #c47f6b);
+}
+
+/* Botones de Navegación */
+.nav-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  border: 1px solid var(--anami-brand-primary, #c47f6b);
+  color: var(--anami-brand-primary, #c47f6b);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background-color: var(--anami-brand-primary, #c47f6b);
+  color: white;
+}
+
+/* Scroll Container para la tabla */
+.calendar-scroll {
+  overflow-x: auto;
+}
+
+.calendar-table-container {
+  min-width: 800px; /* Asegura que no se rompa en móviles */
+}
+
+/* Grid General */
+.calendar-grid-row {
+  display: grid;
+  grid-template-columns: 60px repeat(7, 1fr); /* 1 columna hora + 7 días */
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Encabezados de Días */
+.day-header {
+  padding: 1rem;
+  text-align: center;
+  border-left: 1px solid #f9f9f9;
+}
+
+.day-header.today {
+  background-color: var(--anami-brand-blob, #f9ebe7);
+}
+
+.day-name {
+  color: var(--anami-brand-primary, #c47f6b);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  display: block;
+}
+
+.day-number {
+  color: var(--anami-text-main, #4a403a);
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.header-time-label {
+  padding: 1rem;
+  text-align: center;
+  color: var(--anami-text-light, #8c817c);
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cuerpo del Calendario */
+.calendar-body {
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--anami-brand-primary, #c47f6b);
+  font-weight: 500;
+}
+
+.time-row {
+  height: 80px; /* Altura fija por hora */
+}
+
+.time-label {
+  padding: 0.5rem;
+  text-align: center;
+  color: var(--anami-text-light, #8c817c);
+  font-size: 0.75rem;
+  margin-top: -10px; /* Ajuste visual para alinear con la línea */
+}
+
+.day-column {
+  border-left: 1px solid #f9f9f9;
+  position: relative;
+  padding: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.day-column:hover {
+  background-color: var(--anami-bg-body, #fffcfa);
+}
+
+/* Tarjeta de Cita en el Calendario */
+.appointment-chip {
+  background-color: var(--anami-brand-primary, #c47f6b);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: background-color 0.2s;
+  border-left: 3px solid #a66654;
+}
+
+.appointment-chip:hover {
+  background-color: #a66654;
+}
+
+.appt-time {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.appt-patient {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

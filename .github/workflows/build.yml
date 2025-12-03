@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-dephs: 0
+          fetch-depth: 0 # Corregí 'fetch-dephs' que tenía un typo
 
       - name: Git Semantic Version
         uses: PaulHatch/semantic-version@v4.0.3
@@ -34,12 +34,22 @@ jobs:
         run: |
           docker buildx create --use
 
-      - name: Build Docker Image
+      - name: Build and Push Docker Image
         env:
           NEW_VERSION: ${{ steps.version.outputs.version }}
+        # Usamos un solo paso para construir ambas etiquetas para eficiencia y pasamos los argumentos
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64/v8 -t ikedaharket/anami-masoterapia:$NEW_VERSION --push .
-          docker buildx build --platform linux/amd64,linux/arm64/v8 -t ikedaharket/anami-masoterapia:latest --push .
+          docker buildx build \
+            --platform linux/amd64,linux/arm64/v8 \
+            --build-arg PUBLIC_FIREBASE_API_KEY="${{ secrets.FIREBASE_API_KEY }}" \
+            --build-arg PUBLIC_FIREBASE_AUTH_DOMAIN="${{ secrets.FIREBASE_AUTH_DOMAIN }}" \
+            --build-arg PUBLIC_FIREBASE_PROJECT_ID="${{ secrets.FIREBASE_PROJECT_ID }}" \
+            --build-arg PUBLIC_FIREBASE_STORAGE_BUCKET="${{ secrets.FIREBASE_STORAGE_BUCKET }}" \
+            --build-arg PUBLIC_FIREBASE_MESSAGING_SENDER_ID="${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" \
+            --build-arg PUBLIC_FIREBASE_APP_ID="${{ secrets.FIREBASE_APP_ID }}" \
+            -t ikedaharket/anami-masoterapia:$NEW_VERSION \
+            -t ikedaharket/anami-masoterapia:latest \
+            --push .
 
   deploy:
     needs: build
@@ -57,14 +67,19 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
 
+          # Detener y eliminar el contenedor anterior si existe
           if [ $(docker ps -q -f name=anami-masoterapia) ]; then
             docker stop anami-masoterapia || true
             docker rm anami-masoterapia || true
           fi
 
-          if [ $(docker images -q ikedaharket/anami-masoterapia:latest) ]; then
-            docker rmi ikedaharket/anami-masoterapia:latest || true
-          fi
+          # Eliminar imagen anterior para ahorrar espacio (opcional pero recomendado)
+          # Nota: Esto puede fallar si la imagen está en uso, el '|| true' lo maneja
+          docker rmi ikedaharket/anami-masoterapia:latest || true
 
+          # Descargar la nueva versión
+          docker pull ikedaharket/anami-masoterapia:latest
+
+          # Correr el nuevo contenedor
           docker run -d --restart=always --name anami-masoterapia -p 30002:80 ikedaharket/anami-masoterapia:latest
           ENDSSH

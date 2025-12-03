@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AnamiCalendar from '../presentation/components/Calendar/AnamiCalendar.jsx';
+
+// Importamos estilos para asegurar consistencia
+import '@ikedadev/anami-ui/src/styles/tokens.css';
+import '../styles/global.css';
+---
+
+<Layout 
+    title="Agenda Virtual" 
+    description="Gestión de citas y disponibilidad de Anami Masoterapia."
+>
+    <!-- Contenedor principal con estilo -->
+    <div class="agenda-page-wrapper">
+        <div class="agenda-container">
+            
+            <div class="agenda-header">
+                <span class="agenda-subtitle">Administración</span>
+                <h1 class="agenda-title">
+                    Calendario de Citas
+                </h1>
+            </div>
+
+            <!-- 
+                Cargamos el componente de React.
+                'client:only="react"' es crucial aquí para evitar errores de Firebase en el build time de Astro.
+            -->
+            <AnamiCalendar client:only="react" />
+            
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .agenda-page-wrapper {
+        background-color: var(--anami-bg-body, #FFFCFA);
+        min-height: 100vh;
+        padding: 3rem 0;
+    }
+
+    .agenda-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    @media (min-width: 640px) {
+        .agenda-container { padding: 0 1.5rem; }
+    }
+    @media (min-width: 1024px) {
+        .agenda-container { padding: 0 2rem; }
+    }
+
+    .agenda-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .agenda-subtitle {
+        color: var(--anami-brand-primary, #C47F6B);
+        text-transform: uppercase;
+        letter-spacing: 2px; /* tracking-widest equiv */
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .agenda-title {
+        font-size: 2.25rem; /* text-4xl */
+        line-height: 1.1;
+        font-weight: 300; /* font-light */
+        color: var(--anami-text-main, #4A403A);
+        margin: 0;
+    }
+
+    @media (min-width: 768px) {
+        .agenda-title {
+            font-size: 3rem; /* text-5xl */
+        }
+    }
+</style>

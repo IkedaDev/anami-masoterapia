@@ -8,27 +8,37 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Instalar dependencias
-# Usamos ci (clean install) para entornos de construcción
 RUN yarn install --frozen-lockfile
 
 # Copiar el resto del código fuente
 COPY . .
 
-# Construir el sitio estático (genera la carpeta /dist)
+# --- INYECCIÓN DE VARIABLES FIREBASE ---
+# 1. Definimos los argumentos que recibiremos desde GitHub Actions
+ARG PUBLIC_FIREBASE_API_KEY
+ARG PUBLIC_FIREBASE_AUTH_DOMAIN
+ARG PUBLIC_FIREBASE_PROJECT_ID
+ARG PUBLIC_FIREBASE_STORAGE_BUCKET
+ARG PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+ARG PUBLIC_FIREBASE_APP_ID
+
+# 2. Las establecemos como variables de entorno para que 'yarn build' las vea
+ENV PUBLIC_FIREBASE_API_KEY=$PUBLIC_FIREBASE_API_KEY
+ENV PUBLIC_FIREBASE_AUTH_DOMAIN=$PUBLIC_FIREBASE_AUTH_DOMAIN
+ENV PUBLIC_FIREBASE_PROJECT_ID=$PUBLIC_FIREBASE_PROJECT_ID
+ENV PUBLIC_FIREBASE_STORAGE_BUCKET=$PUBLIC_FIREBASE_STORAGE_BUCKET
+ENV PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+ENV PUBLIC_FIREBASE_APP_ID=$PUBLIC_FIREBASE_APP_ID
+
+# Construir el sitio estático (ahora con las variables inyectadas)
 RUN yarn build
 
 # --- Etapa 2: Servidor Web (Nginx) ---
 FROM nginx:alpine AS runtime
 
-# Copiar los archivos estáticos generados en la etapa anterior
-# a la carpeta donde Nginx sirve contenido
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# (Opcional) Copiar una configuración personalizada de Nginx si fuera necesaria
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exponer el puerto 80
 EXPOSE 80
 
-# Comando por defecto para iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
