@@ -4,23 +4,30 @@ import {
   startOfWeek,
   addDays,
   isSameDay,
+  getMinutes,
+  getHours,
+  differenceInMinutes,
   addWeeks,
   subWeeks,
+  areIntervalsOverlapping,
+  compareAsc,
 } from "date-fns";
 import { es } from "date-fns/locale";
+import { FirebaseAppointmentRepository } from "../../../infrastructure/repositories/FirebaseAppointmentRepository";
 
-// Importamos los estilos CSS normales
 import "./AnamiCalendar.css";
 
-import { FirebaseAppointmentRepository } from "../../../infrastructure/repositories/FirebaseAppointmentRepository";
 const repository = new FirebaseAppointmentRepository();
+
+// Altura de 1 minuto en píxeles
+const PIXELS_PER_MINUTE = 80 / 60;
 
 const AnamiCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Lunes
+  const startDate = startOfWeek(currentDate, { weekStartsOn: 1 });
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -49,33 +56,76 @@ const AnamiCalendar = () => {
   const weekDays = Array.from({ length: 7 }).map((_, i) =>
     addDays(startDate, i)
   );
+
   const timeSlots = [];
   for (let i = 8; i <= 23; i++) {
     timeSlots.push(i);
   }
 
+  // --- LÓGICA DE FUSIÓN DE CITAS ---
+  const getMergedDayAppointments = (day) => {
+    // 1. Filtrar citas del día y ordenarlas por hora de inicio
+    const dayAppts = appointments
+      .filter((appt) => isSameDay(appt.start, day))
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+    if (dayAppts.length === 0) return [];
+
+    const merged = [];
+    let currentBlock = null;
+
+    dayAppts.forEach((appt) => {
+      if (!currentBlock) {
+        currentBlock = { ...appt, originalIds: [appt.id] };
+      } else {
+        // Si la cita actual empieza donde termina la anterior (o se solapan), las unimos
+        // Usamos un margen de tolerancia de 1 minuto por si acaso
+        const gap = differenceInMinutes(appt.start, currentBlock.end);
+
+        if (gap <= 1) {
+          // Son contiguas o se solapan
+          // Extendemos el final del bloque actual
+          // Tomamos el final que sea mayor (por si hay solapamiento total)
+          if (appt.end > currentBlock.end) {
+            currentBlock.end = appt.end;
+          }
+          currentBlock.originalIds.push(appt.id);
+          // Podríamos concatenar nombres si quisiéramos, pero aquí es "Reservado"
+        } else {
+          // Hay un hueco, cerramos el bloque anterior y empezamos uno nuevo
+          merged.push(currentBlock);
+          currentBlock = { ...appt, originalIds: [appt.id] };
+        }
+      }
+    });
+
+    if (currentBlock) {
+      merged.push(currentBlock);
+    }
+
+    return merged;
+  };
+
   return (
     <div className="anami-calendar">
-      {/* Header */}
       <div className="calendar-header">
         <h2 className="calendar-title">
           <span>Agenda</span> {format(startDate, "MMMM yyyy", { locale: es })}
         </h2>
         <div className="nav-group">
           <button onClick={prevWeek} className="nav-btn">
-            ←
+            ← Anterior
           </button>
           <button onClick={nextWeek} className="nav-btn">
-            →
+            Siguiente →
           </button>
         </div>
       </div>
 
-      {/* VISTA DESKTOP (Tabla Scrollable) */}
       <div className="calendar-view-desktop">
         <div className="calendar-scroll">
           <div className="calendar-table-container">
-            {/* Encabezados (Días) */}
+            {/* Encabezados */}
             <div className="calendar-grid-row header-row">
               <div className="header-time-label">Hora</div>
               {weekDays.map((day, i) => (
@@ -93,7 +143,7 @@ const AnamiCalendar = () => {
               ))}
             </div>
 
-            {/* Cuerpo (Horas) */}
+            {/* Cuerpo */}
             <div className="calendar-body">
               {loading && (
                 <div className="loading-overlay">
@@ -105,30 +155,75 @@ const AnamiCalendar = () => {
                 <div key={hour} className="calendar-grid-row time-row">
                   <div className="time-label">{hour}:00</div>
 
-                  {weekDays.map((day, colIndex) => {
-                    const dayAppointments = appointments.filter(
-                      (appt) =>
-                        isSameDay(appt.start, day) &&
-                        appt.start.getHours() === hour
-                    );
+                  {weekDays.map((day, colIndex) => (
+                    <div
+                      key={colIndex}
+                      className="day-column relative-container"
+                    >
+                      {/* Renderizamos SOLAMENTE en la primera iteración de la hora para evitar duplicados
+                                                En realidad, como usamos posición absoluta basada en minutos desde el inicio del día,
+                                                podríamos renderizar todo en un contenedor aparte, pero aquí lo hacemos por columna
+                                                y filtramos para renderizar solo una vez por día.
+                                            */}
 
-                    return (
-                      <div key={colIndex} className="day-column">
-                        {dayAppointments.map((appt) => (
-                          <div
-                            key={appt.id}
-                            className="appointment-chip"
-                            title={`${format(appt.start, "HH:mm")} - Reservado`}
-                          >
-                            <span className="appt-time">
-                              {format(appt.start, "HH:mm")}
-                            </span>
-                            <div className="appt-patient">Reservado</div>
-                          </div>
-                        ))}
-                      </div>
-                    );
-                  })}
+                      {/* Renderizamos los bloques fusionados SOLO en el slot de las 8:00 AM (o el primero)
+                                                para que se dibujen sobre toda la columna del día.
+                                                Esto evita problemas de z-index entre filas de horas.
+                                            */}
+                      {hour === 8 &&
+                        getMergedDayAppointments(day).map((block) => {
+                          // Calcular posición y altura
+                          // OJO: getMinutes solo da 0-59. Necesitamos minutos totales desde las 8:00 AM
+
+                          const startHour = getHours(block.start);
+                          const startMinutes = getMinutes(block.start);
+
+                          // Minutos desde las 8:00 AM (nuestro inicio de calendario)
+                          const minutesFromStart =
+                            (startHour - 8) * 60 + startMinutes;
+
+                          // Si la cita empieza antes de las 8, la cortamos visualmente (o ajustamos top negativo si quisiéramos verla)
+                          const effectiveTop = Math.max(0, minutesFromStart);
+
+                          const durationMinutes = differenceInMinutes(
+                            block.end,
+                            block.start
+                          );
+
+                          // Altura en px
+                          const height = durationMinutes * PIXELS_PER_MINUTE;
+                          const top = effectiveTop * PIXELS_PER_MINUTE;
+
+                          // Si termina antes de las 8:00 AM, no se muestra
+                          if (minutesFromStart + durationMinutes < 0)
+                            return null;
+
+                          return (
+                            <div
+                              key={block.id || block.originalIds[0]}
+                              className="appointment-block merged"
+                              style={{
+                                height: `${height}px`,
+                                top: `${top}px`,
+                                zIndex: 10,
+                              }}
+                              title={`${format(
+                                block.start,
+                                "HH:mm"
+                              )} - ${format(block.end, "HH:mm")} | Reservado`}
+                            >
+                              <div className="appt-content-wrapper">
+                                <span className="appt-time-range">
+                                  {format(block.start, "HH:mm")} -{" "}
+                                  {format(block.end, "HH:mm")}
+                                </span>
+                                <span className="appt-label">Reservado</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
@@ -136,7 +231,7 @@ const AnamiCalendar = () => {
         </div>
       </div>
 
-      {/* VISTA MÓVIL (Lista Vertical por Día) */}
+      {/* VISTA MÓVIL (Sin cambios, lista vertical ya funciona bien) */}
       <div className="calendar-view-mobile">
         {weekDays.map((day, i) => (
           <div
@@ -151,12 +246,11 @@ const AnamiCalendar = () => {
               </span>
             </div>
             <div className="mobile-day-body">
-              {/* Filtrar citas para este día */}
               {appointments.filter((appt) => isSameDay(appt.start, day))
                 .length > 0 ? (
                 appointments
                   .filter((appt) => isSameDay(appt.start, day))
-                  .sort((a, b) => a.start - b.start)
+                  .sort((a, b) => a.start.getTime() - b.start.getTime())
                   .map((appt) => (
                     <div key={appt.id} className="mobile-appointment-item">
                       <div className="mobile-appt-time">
