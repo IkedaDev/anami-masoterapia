@@ -1,6 +1,33 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { servicesData, hotelFeatures, contactInfo } from '../utils/data';
+import { hotelFeatures, contactInfo } from '../utils/data';
+
+const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3000/v1"; // Fallback para desarrollo local
+
+let servicesData = [];
+
+try {
+  const response = await fetch(`${API_URL}/services`);
+  if (!response.ok) {
+    throw new Error(`Error fetching services: ${response.statusText}`);
+  }
+  const result = await response.json();
+  
+  if (result.success && Array.isArray(result.data)) {
+    servicesData = result.data.map((service: any) => ({
+      name: service.name,
+      duration: `${service.durationMin} min`,
+      description: service.description || "",
+      price: `$${service.basePrice.toLocaleString('es-CL')} CLP`
+    }));
+  } else {
+    console.error("Formato de respuesta de API inesperado:", result);
+  }
+} catch (error) {
+  console.error("Fallo al obtener servicios desde el backend durante el build:", error);
+  // Fallback opcional: podrías cargar datos estáticos de respaldo si la API falla
+  // servicesData = [ ... datos de respaldo ... ];
+}
 
 // Preparamos los JSON strings para pasarlos a los Web Components
 const servicesJson = JSON.stringify(servicesData);

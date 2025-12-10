@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   format,
   startOfWeek,
   addDays,
   isSameDay,
   getMinutes,
-  getHours,
   differenceInMinutes,
   addWeeks,
   subWeeks,
-  areIntervalsOverlapping,
-  compareAsc,
+  getDay,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { FirebaseAppointmentRepository } from "../../../infrastructure/repositories/FirebaseAppointmentRepository";
 
 import "./AnamiCalendar.css";
+import { ApiAppointmentRepository } from "../../../infrastructure/repositories/ApiAppointmentRepository";
 
-const repository = new FirebaseAppointmentRepository();
+// 2. INSTANCIA DEL REPOSITORIO REAL
+const repository = new ApiAppointmentRepository();
 
-// Altura de 1 minuto en píxeles
+// CONSTANTE CLAVE: Altura de 1 minuto en el calendario (80px / 60min ≈ 1.3333px/min)
 const PIXELS_PER_MINUTE = 80 / 60;
 
 const AnamiCalendar = () => {
@@ -27,7 +26,7 @@ const AnamiCalendar = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const startDate = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const startDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Lunes
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -62,52 +61,28 @@ const AnamiCalendar = () => {
     timeSlots.push(i);
   }
 
-  // --- LÓGICA DE FUSIÓN DE CITAS ---
-  const getMergedDayAppointments = (day) => {
-    // 1. Filtrar citas del día y ordenarlas por hora de inicio
-    const dayAppts = appointments
-      .filter((appt) => isSameDay(appt.start, day))
-      .sort((a, b) => a.start.getTime() - b.start.getTime());
+  // --- LÓGICA DE HORARIOS DE HOTEL ---
+  const isHotelHour = (day, hour) => {
+    const dayIndex = getDay(day); // 0=Domingo, 1=Lunes, ..., 6=Sábado
 
-    if (dayAppts.length === 0) return [];
+    // Lunes (1): 14:00 - 19:00 (Fin no inclusivo para el bloque de hora)
+    if (dayIndex === 1 && hour >= 14 && hour < 19) return true;
 
-    const merged = [];
-    let currentBlock = null;
+    // Martes (2): 19:00 - 23:00
+    if (dayIndex === 2 && hour >= 19 && hour < 23) return true;
 
-    dayAppts.forEach((appt) => {
-      if (!currentBlock) {
-        currentBlock = { ...appt, originalIds: [appt.id] };
-      } else {
-        // Si la cita actual empieza donde termina la anterior (o se solapan), las unimos
-        // Usamos un margen de tolerancia de 1 minuto por si acaso
-        const gap = differenceInMinutes(appt.start, currentBlock.end);
+    // Sábado (6): 14:00 - 19:00
+    if (dayIndex === 6 && hour >= 14 && hour < 19) return true;
 
-        if (gap <= 1) {
-          // Son contiguas o se solapan
-          // Extendemos el final del bloque actual
-          // Tomamos el final que sea mayor (por si hay solapamiento total)
-          if (appt.end > currentBlock.end) {
-            currentBlock.end = appt.end;
-          }
-          currentBlock.originalIds.push(appt.id);
-          // Podríamos concatenar nombres si quisiéramos, pero aquí es "Reservado"
-        } else {
-          // Hay un hueco, cerramos el bloque anterior y empezamos uno nuevo
-          merged.push(currentBlock);
-          currentBlock = { ...appt, originalIds: [appt.id] };
-        }
-      }
-    });
+    // Futuro Viernes (5): Descomentar cuando sea necesario
+    // if (dayIndex === 5 && hour >= 14 && hour < 19) return true;
 
-    if (currentBlock) {
-      merged.push(currentBlock);
-    }
-
-    return merged;
+    return false;
   };
 
   return (
     <div className="anami-calendar">
+      {/* Header */}
       <div className="calendar-header">
         <h2 className="calendar-title">
           <span>Agenda</span> {format(startDate, "MMMM yyyy", { locale: es })}
@@ -122,10 +97,11 @@ const AnamiCalendar = () => {
         </div>
       </div>
 
+      {/* VISTA DESKTOP (Tabla Scrollable con Posicionamiento Absoluto) */}
       <div className="calendar-view-desktop">
         <div className="calendar-scroll">
           <div className="calendar-table-container">
-            {/* Encabezados */}
+            {/* Encabezados (Días) */}
             <div className="calendar-grid-row header-row">
               <div className="header-time-label">Hora</div>
               {weekDays.map((day, i) => (
@@ -143,7 +119,7 @@ const AnamiCalendar = () => {
               ))}
             </div>
 
-            {/* Cuerpo */}
+            {/* Cuerpo (Horas) */}
             <div className="calendar-body">
               {loading && (
                 <div className="loading-overlay">
@@ -155,75 +131,73 @@ const AnamiCalendar = () => {
                 <div key={hour} className="calendar-grid-row time-row">
                   <div className="time-label">{hour}:00</div>
 
-                  {weekDays.map((day, colIndex) => (
-                    <div
-                      key={colIndex}
-                      className="day-column relative-container"
-                    >
-                      {/* Renderizamos SOLAMENTE en la primera iteración de la hora para evitar duplicados
-                                                En realidad, como usamos posición absoluta basada en minutos desde el inicio del día,
-                                                podríamos renderizar todo en un contenedor aparte, pero aquí lo hacemos por columna
-                                                y filtramos para renderizar solo una vez por día.
-                                            */}
+                  {weekDays.map((day, colIndex) => {
+                    // Verificar si es hora de Hotel
+                    const isHotel = isHotelHour(day, hour);
 
-                      {/* Renderizamos los bloques fusionados SOLO en el slot de las 8:00 AM (o el primero)
-                                                para que se dibujen sobre toda la columna del día.
-                                                Esto evita problemas de z-index entre filas de horas.
-                                            */}
-                      {hour === 8 &&
-                        getMergedDayAppointments(day).map((block) => {
-                          // Calcular posición y altura
-                          // OJO: getMinutes solo da 0-59. Necesitamos minutos totales desde las 8:00 AM
+                    // Estilo de fondo condicional
+                    const bgStyle = isHotel
+                      ? { backgroundColor: "#cae5fcff" }
+                      : {}; // Azul muy suave
 
-                          const startHour = getHours(block.start);
-                          const startMinutes = getMinutes(block.start);
+                    return (
+                      <div
+                        key={colIndex}
+                        className="day-column relative-container"
+                        style={bgStyle}
+                        title={isHotel ? "Horario Hotel" : ""}
+                      >
+                        {/* Renderizamos las citas que COMIENZAN en esta hora */}
+                        {appointments
+                          .filter(
+                            (appt) =>
+                              isSameDay(appt.start, day) &&
+                              appt.start.getHours() === hour
+                          )
+                          .map((appt) => {
+                            // Calcular altura y posición
+                            const durationMinutes = differenceInMinutes(
+                              appt.end,
+                              appt.start
+                            );
+                            const startMinutes = getMinutes(appt.start);
 
-                          // Minutos desde las 8:00 AM (nuestro inicio de calendario)
-                          const minutesFromStart =
-                            (startHour - 8) * 60 + startMinutes;
+                            // Si la duración es muy corta (< 30 min), forzamos una altura mínima visual
+                            const minHeight = 45;
+                            const calculatedHeight =
+                              durationMinutes * PIXELS_PER_MINUTE;
+                            const finalHeight = Math.max(
+                              calculatedHeight,
+                              minHeight
+                            );
 
-                          // Si la cita empieza antes de las 8, la cortamos visualmente (o ajustamos top negativo si quisiéramos verla)
-                          const effectiveTop = Math.max(0, minutesFromStart);
-
-                          const durationMinutes = differenceInMinutes(
-                            block.end,
-                            block.start
-                          );
-
-                          // Altura en px
-                          const height = durationMinutes * PIXELS_PER_MINUTE;
-                          const top = effectiveTop * PIXELS_PER_MINUTE;
-
-                          // Si termina antes de las 8:00 AM, no se muestra
-                          if (minutesFromStart + durationMinutes < 0)
-                            return null;
-
-                          return (
-                            <div
-                              key={block.id || block.originalIds[0]}
-                              className="appointment-block merged"
-                              style={{
-                                height: `${height}px`,
-                                top: `${top}px`,
-                                zIndex: 10,
-                              }}
-                              title={`${format(
-                                block.start,
-                                "HH:mm"
-                              )} - ${format(block.end, "HH:mm")} | Reservado`}
-                            >
-                              <div className="appt-content-wrapper">
-                                <span className="appt-time-range">
-                                  {format(block.start, "HH:mm")} -{" "}
-                                  {format(block.end, "HH:mm")}
-                                </span>
-                                <span className="appt-label">Reservado</span>
+                            return (
+                              <div
+                                key={appt.id}
+                                className="appointment-block"
+                                style={{
+                                  height: `${finalHeight}px`,
+                                  top: `${startMinutes * PIXELS_PER_MINUTE}px`,
+                                  zIndex: 10,
+                                }}
+                                title={`${format(
+                                  appt.start,
+                                  "HH:mm"
+                                )} - ${format(appt.end, "HH:mm")} | Reservado`}
+                              >
+                                <div className="appt-content-wrapper">
+                                  <span className="appt-time-range">
+                                    {format(appt.start, "HH:mm")} -{" "}
+                                    {format(appt.end, "HH:mm")}
+                                  </span>
+                                  <span className="appt-label">Reservado</span>
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  ))}
+                            );
+                          })}
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -231,7 +205,7 @@ const AnamiCalendar = () => {
         </div>
       </div>
 
-      {/* VISTA MÓVIL (Sin cambios, lista vertical ya funciona bien) */}
+      {/* VISTA MÓVIL (Lista Vertical por Día) */}
       <div className="calendar-view-mobile">
         {weekDays.map((day, i) => (
           <div
