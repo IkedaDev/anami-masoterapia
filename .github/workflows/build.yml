@@ -41,7 +41,7 @@ jobs:
         run: |
           docker buildx build \
             --platform linux/amd64,linux/arm64/v8 \
-            --build-arg PUBLIC_API_URL="https://api.ikedadev.com/anami/v1" \
+            --build-arg PUBLIC_API_URL="http://anami_backend:4001/anami/v1" \
             -t ikedaharket/anami-masoterapia:$NEW_VERSION \
             -t ikedaharket/anami-masoterapia:latest \
             --push .
@@ -76,5 +76,10 @@ jobs:
           docker pull ikedaharket/anami-masoterapia:latest
 
           # Correr el nuevo contenedor
-          docker run -d --restart=always --name anami-masoterapia -p 30002:80 ikedaharket/anami-masoterapia:latest
+          docker run -d \
+            --restart=always \
+            --name anami-masoterapia \ 
+            --network infra_network
+            -p 30002:80 \
+            ikedaharket/anami-masoterapia:latest 
           ENDSSH
