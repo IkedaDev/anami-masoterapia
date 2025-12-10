@@ -1,7 +1,7 @@
 ---
 title: "La Importancia de una Limpieza Facial Profesional"
 description: "Por qué tu rutina de casa no es suficiente y los beneficios de una higiene facial profunda."
-pubDate: 2023-10-29
+pubDate: 2025-10-29
 author: "Anami Masoterapia"
 image: "https://i.imgur.com/2ttkNy1.jpeg"
 category: "Belleza"

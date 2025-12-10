@@ -79,7 +79,7 @@ jobs:
           docker run -d \
             --restart=always \
             --name anami-masoterapia \ 
-            --network infra_network
+            --network infra_network \
             -p 30002:80 \
             ikedaharket/anami-masoterapia:latest 
           ENDSSH

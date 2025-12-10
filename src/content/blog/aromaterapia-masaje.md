@@ -1,7 +1,7 @@
 ---
 title: "Aromaterapia en el Masaje: Un Viaje para los Sentidos"
 description: "Descubre cómo los aceites esenciales potencian los beneficios terapéuticos de un masaje relajante."
-pubDate: 2023-10-27
+pubDate: 2025-10-27
 author: "Anami Masoterapia"
 image: "https://i.imgur.com/8M2lVt5.jpeg"
 category: "Bienestar"

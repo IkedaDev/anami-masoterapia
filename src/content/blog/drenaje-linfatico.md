@@ -1,7 +1,7 @@
 ---
 title: "Drenaje Linfático Manual: Salud y Desintoxicación"
 description: "Todo lo que necesitas saber sobre esta técnica suave que ayuda a eliminar toxinas y reducir la retención de líquidos."
-pubDate: 2023-10-28
+pubDate: 2025-10-28
 author: "Anami Masoterapia"
 image: "https://i.imgur.com/Hj17sg2.jpeg"
 category: "Salud"

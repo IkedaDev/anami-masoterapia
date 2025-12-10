@@ -1,7 +1,7 @@
 ---
 title: "Beneficios del Masaje Descontracturante"
 description: "Descubre cómo esta técnica puede aliviar dolores crónicos y mejorar tu postura diaria en solo unas sesiones."
-pubDate: 2023-10-12
+pubDate: 2025-10-12
 category: "Bienestar"
 author: "Anami Masoterapia"
 image: "https://i.imgur.com/d3kIHg2.jpeg"
