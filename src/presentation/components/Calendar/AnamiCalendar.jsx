@@ -188,7 +188,7 @@ const AnamiCalendar = () => {
 
                     // Estilo de fondo condicional para la celda
                     const bgStyle = isHotel
-                      ? { backgroundColor: "#cae5fcff" }
+                      ? { backgroundColor: "#daecfcff" }
                       : {};
 
                     // RETORNAMOS EL DIV DE LA COLUMNA (ESTO FALTABA)
@@ -249,11 +249,13 @@ const AnamiCalendar = () => {
                                     {format(block.start, "HH:mm")} -{" "}
                                     {format(block.end, "HH:mm")}
                                   </span>
-                                  <span className="appt-label">
-                                    {block.originalIds.length > 1
-                                      ? "Reservado"
-                                      : "Reservado"}
-                                  </span>
+                                  {durationMinutes >= 31 && (
+                                    <span className="appt-label">
+                                      {block.originalIds.length > 1
+                                        ? "Reservado"
+                                        : "Reservado"}
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             );
