@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
   // Reemplaza esto con la URL real cuando compres el dominio
-  site: "https://anami.ikedadev.com",
+  site: "https://temucomasajes.cl",
 
   // Genera automáticamente el sitemap.xml para Google
   integrations: [sitemap(), react()],
