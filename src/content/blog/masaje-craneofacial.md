@@ -4,7 +4,7 @@ description: "¿Sufres de migrañas o bruxismo? Este masaje focalizado en cabeza
 pubDate: 2025-01-05
 category: "Bienestar"
 author: "Anami Masoterapia"
-image: "https://img.freepik.com/foto-gratis/hombre-vista-lateral-relajandose-spa_23-2150911825.jpg?t=st=1764622407~exp=1764626007~hmac=5b075753998e32a3334cd5d6fb92c727052d3897050bc85eb8f3b3f818b09f13&w=1480"
+image: "https://i.imgur.com/t7GwgzO.png"
 featured: true
 ---
 
