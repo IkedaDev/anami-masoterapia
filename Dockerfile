@@ -13,10 +13,13 @@ RUN yarn install --frozen-lockfile
 # Copiar el resto del código fuente
 COPY . .
 
-# 💥 NUEVA VARIABLE: URL DEL BACKEND
+# Variables necesarias para el Build estático
 ARG PUBLIC_API_URL
+ARG PUBLIC_GA_ID
 
+# Las exponemos como ENV para que el proceso de 'yarn build' las lea
 ENV PUBLIC_API_URL=$PUBLIC_API_URL
+ENV PUBLIC_GA_ID=$PUBLIC_GA_ID
 
 # Construir el sitio estático (ahora con las variables inyectadas)
 RUN yarn build

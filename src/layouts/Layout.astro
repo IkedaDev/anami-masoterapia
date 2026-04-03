@@ -3,6 +3,7 @@ import SeoHead from '../components/SeoHead.astro';
 
 import '@ikedadev/anami-ui/src/styles/tokens.css';
 import '../styles/global.css';
+import GoogleAnalitycs from '../components/GoogleAnalitycs.astro';
 
 interface Props {
 	title: string;
@@ -19,11 +20,14 @@ const navLinks = JSON.stringify([
     { text: "Agenda", href: "/agenda" },
     { text: "Blog", href: "/blog" },
 ]);
+
+
 ---
 
 <!doctype html>
 <html lang="es">
 	<head>
+        <GoogleAnalitycs></GoogleAnalitycs>
         <SeoHead title={title} description={description} />
 	</head>
 	<body>

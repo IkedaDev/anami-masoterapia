@@ -42,6 +42,7 @@ jobs:
           docker buildx build \
             --platform linux/amd64,linux/arm64/v8 \
             --build-arg PUBLIC_API_URL="https://api.ikedadev.com/anami/v1" \
+            --build-arg PUBLIC_GA_ID=${{ secrets.PUBLIC_GA_ID }} \
             -t ikedaharket/anami-masoterapia:$NEW_VERSION \
             -t ikedaharket/anami-masoterapia:latest \
             --push .
