@@ -5,6 +5,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
 
 <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
 <script is:inline define:vars={{ gaId }}>
+    
 function loadGA() {
     window.dataLayer = window.dataLayer || [];
     function gtag() {
