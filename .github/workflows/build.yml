@@ -32,7 +32,7 @@ jobs:
 
       - name: Update Infra Repo
         run: |
-          TARGET_DIR=${{ github.ref_name == 'main' && 'tenants/anami/frontend/prod' || 'tenants/anami/frontend/qa' }}
+          TARGET_DIR=${{ github.ref_name == 'main' && 'tenants/anami/prod/frontend' || 'tenants/anami/qa/frontend' }}
           
           git config --global user.email "bot@ikedadev.com"
           git config --global user.name "IkedaDev Bot"
