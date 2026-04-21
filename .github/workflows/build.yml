@@ -1,86 +1,25 @@
-name: Build
+name: Build and Push Anami Frontend
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
     branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Corregí 'fetch-dephs' que tenía un typo
-
-      - name: Git Semantic Version
-        uses: PaulHatch/semantic-version@v4.0.3
-        with:
-          major_pattern: "major:"
-          minor_pattern: "feat:"
-          format: "${major}.${minor}.${patch}-prerelease${increment}"
-        id: version
-
+      - uses: actions/checkout@v4
       - name: Docker Login
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_TOKEN
-
-      - name: Set up Docker Buildx
-        run: |
-          docker buildx create --use
-
-      - name: Build and Push Docker Image
-        env:
-          NEW_VERSION: ${{ steps.version.outputs.version }}
-        # Usamos un solo paso para construir ambas etiquetas para eficiencia y pasamos los argumentos
-        run: |
-          docker buildx build \
-            --platform linux/amd64,linux/arm64/v8 \
-            --build-arg PUBLIC_API_URL="https://api.ikedadev.com/anami/v1" \
-            --build-arg PUBLIC_GA_ID=${{ secrets.PUBLIC_GA_ID }} \
-            -t ikedaharket/anami-masoterapia:$NEW_VERSION \
-            -t ikedaharket/anami-masoterapia:latest \
-            --push .
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: docker/login-action@v3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy Application
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
-
-          # Detener y eliminar el contenedor anterior si existe
-          if [ $(docker ps -q -f name=anami-masoterapia) ]; then
-            docker stop anami-masoterapia || true
-            docker rm anami-masoterapia || true
-          fi
-
-          # Eliminar imagen anterior para ahorrar espacio (opcional pero recomendado)
-          # Nota: Esto puede fallar si la imagen está en uso, el '|| true' lo maneja
-          docker rmi ikedaharket/anami-masoterapia:latest || true
-
-          # Descargar la nueva versión
-          docker pull ikedaharket/anami-masoterapia:latest
-
-          # Correr el nuevo contenedor
-          docker run -d \
-            --restart=always \
-            --name anami-masoterapia \
-            --network infra_network \
-            -p 30002:80 \
-            ikedaharket/anami-masoterapia:latest 
-          ENDSSH
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ikedaharket/anami-frontend:latest
+          platforms: linux/arm64 # Vital para tu Raspberry Pi 5
