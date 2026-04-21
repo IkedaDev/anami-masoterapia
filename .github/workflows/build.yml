@@ -28,7 +28,7 @@ jobs:
           platforms: linux/arm64
           # INYECCIÓN DE VARIABLES SEGÚN RAMA
           build-args: |
-            PUBLIC_API_URL=${{ github.ref_name == 'main' && 'https://api.temucomasajes.cl' || 'https://api-qa.temucomasajes.cl' }}
+            PUBLIC_API_URL=${{ github.ref_name == 'main' && 'https://api.temucomasajes.cl' || 'https://api.qa.temucomasajes.cl' }}
 
       - name: Update Infra Repo
         run: |
