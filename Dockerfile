@@ -1,35 +1,18 @@
-# --- Etapa 1: Construcción (Builder) ---
-FROM node:20-alpine AS builder
-
-# Establecer directorio de trabajo
+# --- ETAPA 1: Construcción ---
+FROM node:20-slim AS builder
 WORKDIR /app
-
-# Copiar archivos de dependencias
-COPY package.json yarn.lock ./
-
-# Instalar dependencias
-RUN yarn install --frozen-lockfile
-
-# Copiar el resto del código fuente
+COPY package*.json ./
+RUN npm install
 COPY . .
+# Definimos la URL de la API para que el front sepa dónde conectar
+ENV PUBLIC_API_URL=https://api.temucomasajes.cl
+RUN npm run build
 
-# Variables necesarias para el Build estático
-ARG PUBLIC_API_URL
-ARG PUBLIC_GA_ID
-
-# Las exponemos como ENV para que el proceso de 'yarn build' las lea
-ENV PUBLIC_API_URL=$PUBLIC_API_URL
-ENV PUBLIC_GA_ID=$PUBLIC_GA_ID
-
-# Construir el sitio estático (ahora con las variables inyectadas)
-RUN yarn build
-
-# --- Etapa 2: Servidor Web (Nginx) ---
-FROM nginx:alpine AS runtime
-
+# --- ETAPA 2: Servidor ---
+# Si usas salida estática, usamos Nginx (más rápido en la Pi)
+FROM nginx:alpine AS runner
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Exponer el puerto 80
+# Configuración básica para manejar rutas de Astro (SPA/Routing)
+RUN printf 'server { listen 80; location / { root /usr/share/nginx/html; index index.html; try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
 EXPOSE 80
-
 CMD ["nginx", "-g", "daemon off;"]
