@@ -36,7 +36,7 @@ jobs:
           
           git config --global user.email "bot@ikedadev.com"
           git config --global user.name "IkedaDev Bot"
-          git clone https://x-access-token:${{ secrets.INFRA_REPO_TOKEN }}@github.com/ikedaharket/ikedadev-infra.git
+          git clone https://x-access-token:${{ secrets.INFRA_REPO_TOKEN }}@github.com/IkedaDev/ikedadev-infra
           cd ikedadev-infra
           
           sed -i "s|image: ikedaharket/anami-frontend:.*|image: ikedaharket/anami-frontend:${{ github.sha }}|g" ${TARGET_DIR}/deployment.yaml
