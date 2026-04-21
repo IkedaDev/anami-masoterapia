@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Definimos la URL de la API para que el front sepa dónde conectar
-ENV PUBLIC_API_URL=https://api.temucomasajes.cl
+ENV PUBLIC_API_URL=https://api.temucomasajes.cl/v1
 RUN npm run build
 
 # --- ETAPA 2: Servidor ---
