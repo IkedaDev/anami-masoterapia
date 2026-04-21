@@ -1,17 +1,14 @@
-name: Build and Deploy (GitOps)
+name: Build and Deploy Frontend
 
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: ["main", "develop"]
 
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Docker Login
         uses: docker/login-action@v3
@@ -19,39 +16,31 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      # Construimos la imagen usando el SHA del commit como versión única
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: |
-            ikedaharket/anami-frontend:${{ github.sha }}
+          tags: ikedaharket/anami-frontend:${{ github.sha }}
           platforms: linux/arm64
+          # INYECCIÓN DE VARIABLES SEGÚN RAMA
+          build-args: |
+            PUBLIC_API_URL=${{ github.ref_name == 'main' && 'https://api.temucomasajes.cl' || 'https://api-qa.temucomasajes.cl' }}
 
-      # --- LÓGICA DE SEPARACIÓN DE ENTORNOS ---
-      - name: Update Infrastructure Repo
+      - name: Update Infra Repo
         run: |
-          # 1. Determinar el directorio objetivo según la rama
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            TARGET_DIR="tenants/anami/prod/frontend"
-            ENV_NAME="PROD"
-          else
-            TARGET_DIR="tenants/anami/qa/frontend"
-            ENV_NAME="QA"
-          fi
-
-          # 2. Clonar repo de infra
+          TARGET_DIR=${{ github.ref_name == 'main' && 'tenants/anami/frontend/prod' || 'tenants/anami/frontend/qa' }}
+          
           git config --global user.email "bot@ikedadev.com"
           git config --global user.name "IkedaDev Bot"
           git clone https://x-access-token:${{ secrets.INFRA_REPO_TOKEN }}@github.com/ikedaharket/ikedadev-infra.git
           cd ikedadev-infra
-
-          # 3. Actualizar la imagen en el YAML correspondiente
-          # Buscamos la línea 'image:' y reemplazamos todo lo que venga después por la nueva versión
+          
           sed -i "s|image: ikedaharket/anami-frontend:.*|image: ikedaharket/anami-frontend:${{ github.sha }}|g" ${TARGET_DIR}/deployment.yaml
-
-          # 4. Commit y Push
+          
           git add .
-          git commit -m "chore($ENV_NAME): update image to ${{ github.sha }} from branch ${{ github.ref_name }}"
+          git commit -m "chore: update frontend image to ${{ github.sha }} (${{ github.ref_name }})"
           git push
