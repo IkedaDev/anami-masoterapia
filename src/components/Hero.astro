@@ -1,0 +1,131 @@
+---
+// src/components/Hero.astro
+interface Props {
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  linkHref?: string;
+  linkText?: string;
+}
+
+const { 
+  title, 
+  subtitle, 
+  imageUrl, 
+  linkHref = "#servicios", 
+  linkText = "Conoce más" 
+} = Astro.props;
+---
+
+<section class="an-hero">
+  <div class="an-hero__content">
+    <h1 class="an-hero__title">
+      <span class="an-hero__accent">Natural</span>
+      {title}
+    </h1>
+    <p class="an-hero__subtitle">{subtitle}</p>
+    <a href={linkHref} class="an-button an-button--lg">
+      {linkText}
+    </a>
+  </div>
+  <div class="an-hero__image-wrapper">
+    <img src={imageUrl} alt="Anami Masoterapia Hero" class="an-hero__image" />
+    <div class="an-hero__badge">Relax &<br />Renew</div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    min-height: 85vh;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 3.2rem; // 2rem * 1.6
+    position: relative;
+
+    &__content {
+      padding-right: 6.4rem; // 4rem * 1.6
+      z-index: 2;
+    }
+
+    &__title {
+      font-size: 7.2rem; // 4.5rem * 1.6
+      font-weight: $font-weight-light;
+      line-height: 1.05;
+      margin: 0 0 2.4rem 0;
+      color: clr('text', 'main');
+      letter-spacing: -0.02em;
+    }
+
+    &__accent {
+      display: block;
+      font-weight: $font-weight-light;
+      font-style: italic;
+      font-family: $font-accent; // Usamos Playfair Display de la UI
+      font-size: 0.6em;
+      margin-bottom: 0.2em;
+      color: clr('brand', 'primary');
+    }
+
+    &__subtitle {
+      font-size: 1.76rem; // 1.1rem * 1.6
+      color: clr('text', 'light');
+      max-width: 450px;
+      line-height: 1.7;
+      margin-bottom: 4rem; // 2.5rem * 1.6
+      font-weight: $font-weight-light;
+    }
+
+    &__image-wrapper {
+      position: relative;
+      height: 650px;
+      width: 100%;
+    }
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 200px 200px 0 0;
+    }
+
+    &__badge {
+      position: absolute;
+      bottom: 80px;
+      left: -40px;
+      background: clr('bg', 'surface');
+      padding: 2rem;
+      border-radius: 50%;
+      width: 12rem;
+      height: 12rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: $shadow-soft;
+      font-size: 1.28rem; // 0.8rem * 1.6
+      color: clr('brand', 'primary');
+      transform: rotate(-10deg);
+      font-family: $font-main;
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: 4.8rem;
+      text-align: center;
+      padding-top: 3.2rem;
+
+      &__content { padding-right: 0; margin: 0 auto; }
+      &__title { font-size: 4.8rem; }
+      &__subtitle { margin: 0 auto 3.2rem auto; }
+      &__image-wrapper { height: 400px; width: 90%; margin: 0 auto; }
+      &__badge { display: none; }
+      &__image { border-radius: 150px 150px 0 0; }
+    }
+  }
+</style>

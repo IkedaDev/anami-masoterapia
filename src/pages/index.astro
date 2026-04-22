@@ -1,10 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Bio from '../components/Bio.astro';
 import { hotelFeatures, contactInfo } from '../utils/data';
+import HotelSection from '../components/HotelSection.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
 
 const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3000/v1"; // Fallback para desarrollo local
 
-let servicesData = [];
+let services = [];
 
 try {
   const response = await fetch(`${API_URL}/services`);
@@ -14,7 +18,7 @@ try {
   const result = await response.json();
   
   if (result.success && Array.isArray(result.data)) {
-    servicesData = result.data.map((service: any) => ({
+    services = result.data.map((service: any) => ({
       name: service.name,
       duration: `${service.durationMin} min`,
       description: service.description || "",
@@ -28,104 +32,66 @@ try {
 
 }
 
-const servicesJson = JSON.stringify(servicesData);
-const hotelJson = JSON.stringify(hotelFeatures);
-
 ---
 <Layout 
     title="Masoterapia y Masajes Descontracturantes en Temuco | Anami" 
-    description="Masoterapia profesional en Temuco y Padre las Casas. Masajes descontracturantes, de relajación y servicios exclusivos en Hotel Tierra del Sur."
+    description="..."
 >
-    
-    <!-- Hero Section -->
     <section id="inicio">
-        <anami-hero
+        <Hero
             title="Bienestar y equilibrio"
             subtitle="Masoterapia profesional en Temuco y Padre las Casas. Un espacio diseñado para reconectar con tu cuerpo."
-            image-url="https://i.imgur.com/G48cSaP.jpeg"
-        ></anami-hero>
+            imageUrl="https://i.imgur.com/G48cSaP.jpeg"
+        />
     </section>
 
-	<!-- Sección Sobre Mí (Bio) -->
     <section id="bio">
-        <anami-bio
+        <Bio
             name="Hola, soy Anette"
             subtitle="Masoterapeuta Certificada"
             description="El masaje no es solo una técnica, es una forma de comunicación silenciosa. Con 3 años de experiencia, me dedico a crear espacios de pausa en un mundo acelerado, especializándome en aliviar la tensión crónica y restaurar la vitalidad."
-            image-url="https://raw.githubusercontent.com/IkedaDev/anami-masoterapia-old/refs/heads/main/src/assets/images/p2-s2-1.jpeg"
-        ></anami-bio>
+            imageUrl="https://raw.githubusercontent.com/IkedaDev/anami-masoterapia-old/refs/heads/main/src/assets/images/p2-s2-1.jpeg"
+        />
     </section>
 
-    <!-- Sección de Servicios Generales -->
     <section id="servicios">
-        <anami-service-card-grid 
-            services-json={servicesJson}
-        ></anami-service-card-grid>
+    <ServiceGrid services={services} />
     </section>
 
-    
-
-	<!-- Sección de Hotel (Nuevo Componente) -->
     <section id="hotel">
-        <anami-simple-section
-            title="Experiencia Tierra del Sur"
-            description="Complementa tu estadía con un masaje express. Sesiones diseñadas para revitalizar tu energía después de un día de turismo o spa. El complemento perfecto para tu descanso."
-            image-url="https://raw.githubusercontent.com/IkedaDev/anami-masoterapia-old/refs/heads/main/src/assets/images/p3-s1-1.jpg"
-            features-json={hotelJson}
-        ></anami-simple-section>
-    </section>
-
-	<!-- Call to Action Principal -->
-    <anami-cta-card
-        title="Reserva tu momento"
-        text="Tu cuerpo es tu hogar. Agenda una sesión personalizada y descubre los beneficios de la masoterapia profesional."
-        button-text="Agendar Visita"
-        image-url="https://i.imgur.com/d3kIHg2.jpeg"
-    ></anami-cta-card>
-
-    <!-- Sección de Contacto -->
-    <section id="contacto">
-        <anami-contact-section
-            phone={contactInfo.phone}
-            email={contactInfo.email}
-            instagram={contactInfo.instagram}
-            address={contactInfo.address}
-        ></anami-contact-section>
+        <HotelSection 
+        title="Experiencia Tierra del Sur"
+        description="Complementa tu estadía con un masaje express. Sesiones diseñadas para revitalizar tu energía después de un día de turismo o spa. El complemento perfecto para tu descanso."
+        imageUrl="https://raw.githubusercontent.com/IkedaDev/anami-masoterapia-old/refs/heads/main/src/assets/images/p3-s1-1.jpg"
+        features={hotelFeatures}
+        />
     </section>
 
 </Layout>
+    
 
 <script>
-    // LÓGICA DEL CLIENTE
-    // Este script se ejecuta en el navegador del usuario para manejar los eventos personalizados.
     const wspPhone = "56963564897"
 
-    // 1. Manejar clicks en los servicios (Redirigir a WhatsApp)
     const serviceGrid = document.querySelector('anami-service-card-grid');
     if (serviceGrid) {
         serviceGrid.addEventListener('service-selected', (event:any) => {
-            // TypeScript: aserción de tipo para acceder a 'detail' si es necesario, 
-            // o simplemente usar event.detail en JS estándar.
             const service = event.detail;
             
             console.log('Cliente interesando en:', service.name);
             
-            // Número limpio para la API de WhatsApp (sin espacios ni símbolos)
             const message = `Hola Anette, me interesa agendar un *${service.name}* que vi en tu web.`;
             
-            // Abrir WhatsApp en nueva pestaña
             window.open(`https://wa.me/${wspPhone}?text=${encodeURIComponent(message)}`, '_blank');
         });
     }
     
-    // 2. Manejar click en el CTA "Agendar Visita" (Scroll suave al contacto)
     const ctaCard = document.querySelector('anami-cta-card');
     
     if (ctaCard) {
         ctaCard.addEventListener('cta-card-click', () => {
             const message = `Hola Anette, me interesa agendar una hora.`;
             
-            // Abrir WhatsApp en nueva pestaña
             window.open(`https://wa.me/${wspPhone}?text=${encodeURIComponent(message)}`, '_blank');
         });
     }

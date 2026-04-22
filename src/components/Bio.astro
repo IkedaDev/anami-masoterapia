@@ -1,0 +1,106 @@
+---
+// src/components/Bio.astro
+interface Props {
+  name: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+}
+
+const { name, subtitle, description, imageUrl } = Astro.props;
+---
+
+<section class="an-bio">
+  <div class="an-bio__container">
+    <div class="an-bio__image-area">
+      <div class="an-bio__blob"></div>
+      <img src={imageUrl} alt={name} class="an-bio__img" />
+    </div>
+    <div class="an-bio__text-area">
+      <h2 class="an-bio__name">{name}</h2>
+      <span class="an-bio__subtitle">{subtitle}</span>
+      <p class="an-text--body">{description}</p>
+      <div class="an-text--signature">Anette L.</div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-bio {
+    padding: 9.6rem 3.2rem; // 6rem * 1.6
+    max-width: 1100px;
+    margin: 0 auto;
+
+    &__container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 8rem; // 5rem * 1.6
+      align-items: center;
+    }
+
+    &__image-area {
+      position: relative;
+    }
+
+    &__blob {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      width: 100%;
+      height: 100%;
+      background: clr('brand', 'blob');
+      z-index: -1;
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    &__img {
+      width: 100%;
+      border-radius: $radius-lg;
+      box-shadow: $shadow-soft;
+      display: block;
+    }
+
+    &__text-area { padding-top: 3.2rem; }
+
+    &__name {
+      font-size: 4rem; // 2.5rem * 1.6
+      font-weight: $font-weight-light;
+      margin: 0 0 0.8rem 0;
+      color: clr('text', 'main');
+    }
+
+    &__subtitle {
+      display: block;
+      color: clr('brand', 'primary');
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1.28rem; // 0.8rem * 1.6
+      margin-bottom: 3.2rem;
+      font-weight: $font-weight-medium;
+    }
+
+    &__desc {
+      color: clr('text', 'light');
+      font-size: 1.68rem; // 1.05rem * 1.6
+      line-height: 1.8;
+      margin-bottom: 3.2rem;
+      font-weight: $font-weight-light;
+    }
+
+    &__signature {
+      font-family: $font-signature; // Usamos Dancing Script de la UI
+      font-size: 2.4rem; // 1.5rem * 1.6
+      color: clr('text', 'main');
+    }
+
+    @media (max-width: 768px) {
+      &__container { grid-template-columns: 1fr; gap: 4.8rem; }
+      &__image-area { width: 80%; margin: 0 auto; }
+      &__text-area { text-align: center; }
+    }
+  }
+</style>

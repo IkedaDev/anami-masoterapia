@@ -1,0 +1,170 @@
+---
+// src/components/ServiceGrid.astro
+interface Service {
+  name: string;
+  duration: string;
+  description: string;
+  price: string;
+}
+
+interface Props {
+  services: Service[];
+  phone?: string;
+}
+
+const { services, phone = "56963564897" } = Astro.props;
+---
+
+<section class="an-services">
+  <h2 class="an-services__title">
+    <span class="an-services__subtitle">Servicios Destacados</span>
+    Encuentra el masaje perfecto para ti
+  </h2>
+
+  <div class="an-services__grid">
+    {services.map((service) => (
+      <div 
+        class="an-service-card" 
+        data-service-name={service.name}
+        data-phone={phone}
+        role="button"
+        tabindex="0"
+      >
+        <div class="an-service-card__header">
+          <h4 class="an-service-card__name">{service.name}</h4>
+          <span class="an-service-card__duration">{service.duration}</span>
+        </div>
+        <p class="an-service-card__description">{service.description}</p>
+        <div class="an-service-card__footer">
+          <span class="an-service-card__price">{service.price}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-services {
+    padding: 6.4rem 3.2rem; // 4rem * 1.6
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &__title {
+      text-align: center;
+      font-size: 4.48rem; // 2.8rem * 1.6
+      font-weight: $font-weight-light;
+      margin-bottom: 6.4rem;
+      color: clr('text', 'main');
+      letter-spacing: -0.02em;
+    }
+
+    &__subtitle {
+      display: block;
+      color: clr('brand', 'primary');
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 1.28rem; // 0.8rem * 1.6
+      font-weight: $font-weight-medium;
+      margin-bottom: 0.8rem;
+    }
+
+    &__grid {
+      display: grid;
+      // Mínimo de 340px (34rem) para mantener la proporción original
+      grid-template-columns: repeat(auto-fit, minmax(34rem, 1fr));
+      gap: 4.8rem; // 3rem * 1.6
+    }
+  }
+
+  .an-service-card {
+    background: clr('bg', 'surface');
+    padding: 3.2rem; // 2rem * 1.6
+    border-radius: $radius-lg;
+    box-shadow: $shadow-soft;
+    transition: $transition-base;
+    border: 1px solid clr('brand', 'secondary');
+    display: flex;
+    flex-direction: column;
+    cursor: pointer; // Indica que toda la card es accionable
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: $shadow-hover;
+    }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2.4rem;
+      border-bottom: 1px dashed clr('brand', 'secondary');
+      padding-bottom: 1.6rem;
+      gap: 1.6rem;
+    }
+
+    &__name {
+      font-size: 2.4rem; // 1.5rem * 1.6
+      font-weight: $font-weight-regular;
+      margin: 0;
+      color: clr('brand', 'primary');
+    }
+
+    &__duration {
+      font-size: 1.44rem; // 0.9rem * 1.6
+      color: clr('text', 'light');
+      background: clr('brand', 'secondary');
+      padding: 0.4rem 1.2rem;
+      border-radius: $radius-pill;
+      font-weight: $font-weight-medium;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    &__description {
+      font-size: 1.6rem; // 1rem * 1.6
+      color: clr('text', 'light');
+      line-height: 1.7;
+      margin-bottom: 3.2rem;
+      flex-grow: 1;
+    }
+
+    &__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__price {
+      font-size: 2.88rem; // 1.8rem * 1.6
+      font-weight: $font-weight-medium;
+      color: clr('text', 'main');
+    }
+  }
+</style>
+
+<script>
+  // Lógica para abrir WhatsApp al hacer click en la card
+  const cards = document.querySelectorAll('.an-service-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      // @ts-ignore
+      const name = card.dataset.serviceName;
+      // @ts-ignore
+      const phone = card.dataset.phone;
+      
+      const message = encodeURIComponent(`¡Hola Anami! Me gustaría agendar una cita para el servicio: ${name}.`);
+      const whatsappUrl = `https://wa.me/${phone}?text=${message}`;
+      
+      window.open(whatsappUrl, '_blank');
+    });
+
+    // Soporte para teclado (Enter)
+    card.addEventListener('keydown', (e) => {
+      // @ts-ignore
+      if (e.key === 'Enter') card.click();
+    });
+  });
+</script>

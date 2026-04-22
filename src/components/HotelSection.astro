@@ -1,0 +1,147 @@
+---
+import type { FeatureHotel } from '../domain/models/FeatureHotel';
+
+interface Props {
+  title: string;
+  description: string;
+  imageUrl: string;
+  features: FeatureHotel[];
+}
+
+const { title, description, imageUrl, features } = Astro.props;
+
+const icons = {
+  renovacion: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M30 14h6v6l2 4v16a2 2 0 0 1-2 2H26a2 2 0 0 1-2-2V24l2-4v-6h4M30 14V8h6v6" /><rect x="29" y="4" width="8" height="4" rx="1" /><rect x="8" y="24" width="18" height="16" rx="3" stroke-width="1.5"/><path d="M17 24v-6M17 18h-4" /><rect x="10" y="14" width="6" height="4" rx="1" /></svg>`,
+  alivio: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M24 8c0 0 6 6 6 14s-6 8-6 8s-6 0-6-8s6-14 6-14zM30 22l8-4-2 10s-2 4-6 6M18 22l-8-4 2 10s2 4 6 6M34 34c0 0 4 2 4 4s-6 2-8 0M14 34c0 0-4 2-4 4s6 2 8 0M24 30c0 0 3 6 0 10c-3-4 0-10 0-10z" /></svg>`,
+  vitalidad: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M24 18c-4-5-10-5-13 0-2.5 4-1 9 4 14l9 9 9-9c5-5 6.5-10 4-14-3-5-9-5-13 0zM24 21v6M21 24h6" /></svg>`
+};
+---
+
+<section class="an-hotel">
+  <div class="an-hotel__container">
+    <div class="an-hotel__image-wrapper">
+      <img src={imageUrl} alt={title} class="an-hotel__image" />
+    </div>
+    <div class="an-hotel__content">
+      <h2 class="an-hotel__title">{title}</h2>
+      <p class="an-hotel__description">{description}</p>
+      
+      <div class="an-hotel__features">
+        {features.map((f) => (
+          <div class="an-hotel__feature-item">
+            <div class="an-hotel__icon-box" set:html={icons[f.icon] || ''} />
+            <span class="an-hotel__feature-label">{f.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-hotel {
+    padding: 9.6rem 3.2rem; // 6rem * 1.6
+    background: clr('bg', 'surface');
+
+    &__container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem; // 5rem * 1.6
+      align-items: center;
+    }
+
+    &__image-wrapper {
+      position: relative;
+      height: 550px;
+      border-radius: $radius-lg;
+      overflow: hidden;
+      box-shadow: $shadow-soft;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.05);
+      }
+    }
+
+    &__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+
+      &:hover { transform: scale(1.02); }
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 3.2rem; // 2rem * 1.6
+    }
+
+    &__title {
+      font-size: 5.6rem; // 3.5rem * 1.6
+      font-weight: $font-weight-light;
+      margin: 0;
+      color: clr('text', 'main');
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    &__description {
+      font-size: 1.68rem; // 1.05rem * 1.6
+      line-height: 1.8;
+      color: clr('text', 'light');
+      font-weight: $font-weight-light;
+      margin: 0;
+      max-width: 500px;
+    }
+
+    &__features {
+      display: flex;
+      gap: 4.8rem; // 3rem * 1.6
+      margin-top: 3.2rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding-top: 3.2rem;
+    }
+
+    &__feature-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.6rem;
+    }
+
+    &__icon-box {
+      width: 5.6rem;
+      height: 5.6rem;
+      color: clr('brand', 'primary');
+      transition: $transition-base;
+
+      &:hover { transform: translateY(-5px); }
+    }
+
+    &__feature-label {
+      font-size: 1.28rem; // 0.8rem * 1.6
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: clr('text', 'light');
+      font-weight: $font-weight-medium;
+    }
+
+    @media (max-width: 900px) {
+      &__container { grid-template-columns: 1fr; gap: 4.8rem; }
+      &__image-wrapper { height: 350px; order: -1; }
+      &__content { text-align: center; align-items: center;}
+      &__title { font-size: 4rem; }
+      &__features { justify-content: center; gap: 3.2rem; width: 100%; }
+    }
+  }
+</style>

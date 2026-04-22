@@ -1,3 +1,5 @@
+import type { FeatureHotel } from "../domain/models/FeatureHotel";
+
 export const servicesData = [
   {
     name: "Masaje Descontracturante",
@@ -57,7 +59,7 @@ export const servicesData = [
   },
 ];
 
-export const hotelFeatures = [
+export const hotelFeatures: FeatureHotel[] = [
   { icon: "renovacion", label: "Renovación" },
   { icon: "alivio", label: "Alivio" },
   { icon: "vitalidad", label: "Vitalidad" },
