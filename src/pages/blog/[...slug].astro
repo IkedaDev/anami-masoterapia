@@ -1,8 +1,7 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/HomeLayout.astro';
 
-// 1. Generar rutas estáticas para cada post
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
@@ -10,133 +9,271 @@ export async function getStaticPaths() {
 		props: post,
 	}));
 }
+type Props = CollectionEntry<'blog'>;
 
-// 2. Obtener datos del post actual
 const post = Astro.props;
 const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title} description={post.data.description}>
-    <article class="post-article">
-        <!-- Hero del Post -->
-        <div class="post-hero" style={`background-image: url(${post.data.image})`}>
-            <div class="overlay"></div>
-            <div class="hero-content">
-                <span class="category">{post.data.category}</span>
-                <h1>{post.data.title}</h1>
-                <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </time>
+    <article class="an-post-premium">
+        <header class="an-post-premium__header">
+            <div class="an-post-premium__container">
+                <div class="an-post-premium__meta">
+                    <span class="an-post-premium__tag">Anami Wellness</span>
+                    <span class="an-post-premium__divider"></span>
+                    <time class="an-post-premium__date">
+                        {post.data.pubDate.toLocaleDateString('es-CL', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                        })}
+                    </time>
+                </div>
+                
+                <h1 class="an-post-premium__title">{post.data.title}</h1>
+                <p class="an-post-premium__lead">{post.data.description}</p>
             </div>
-        </div>
 
-        <!-- Contenido Markdown -->
-        <div class="content-wrapper">
-            <div class="markdown-body">
+            {post.data.image && (
+                <div class="an-post-premium__hero">
+                    <img src={post.data.image} alt={post.data.title} class="an-post-premium__hero-img" />
+                </div>
+            )}
+        </header>
+
+        <div class="an-post-premium__body">
+            <div class="an-post-premium__content">
                 <Content />
             </div>
-            
-            <div class="share-section">
-                <a href="/blog" class="back-link">← Volver al Blog</a>
-            </div>
+
+            <footer class="an-post-premium__footer">
+                <a href="/blog" class="an-nav-back">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Volver al Blog</span>
+                </a>
+            </footer>
         </div>
     </article>
 </Layout>
 
-<style>
-    /* Estilos específicos del artículo */
-    .post-hero {
-        height: 60vh;
-        min-height: 400px;
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        text-align: center;
-        color: white;
-    }
-    
-    .overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+<style lang="scss">
+    @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+    @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+    .an-post-premium {
+        background-color: clr('bg', 'body');
+        padding-bottom: 8rem;
+
+        &__header {
+            padding: 8rem 0 4.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            @media (max-width: 768px) {
+                padding: 4.8rem 0 3.2rem;
+            }
+        }
+
+        &__container {
+            max-width: 900px;
+            width: 100%;
+            padding: 0 3.2rem;
+            text-align: center;
+            margin-bottom: 5.6rem;
+
+            @media (max-width: 768px) {
+                padding: 0 2.4rem;
+                margin-bottom: 3.2rem;
+            }
+        }
+
+        &__meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.6rem;
+            margin-bottom: 3.2rem;
+            background: clr('bg', 'surface');
+            padding: 0.8rem 2.4rem;
+            border-radius: $radius-pill;
+            border: 1px solid clr('brand', 'secondary');
+
+            @media (max-width: 480px) {
+                gap: 1rem;
+                padding: 0.6rem 1.6rem;
+            }
+        }
+
+        &__tag {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: $font-weight-medium;
+            color: clr('brand', 'primary');
+        }
+
+        &__divider {
+            width: 1px;
+            height: 12px;
+            background-color: clr('brand', 'secondary');
+        }
+
+        &__date {
+            font-size: 1.3rem;
+            color: clr('text', 'light');
+            font-weight: $font-weight-light;
+        }
+
+        &__title {
+            font-size: 6.4rem; 
+            line-height: 1.1;
+            color: clr('text', 'main');
+            margin-bottom: 3.2rem;
+            font-weight: $font-weight-medium;
+            letter-spacing: -0.03em;
+
+            @media (max-width: 768px) {
+                font-size: 3.6rem; // Tamaño corregido para móvil
+                margin-bottom: 2.4rem;
+            }
+        }
+
+        &__lead {
+            font-size: 2.24rem;
+            line-height: 1.6;
+            color: clr('text', 'light');
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: $font-weight-light;
+
+            @media (max-width: 768px) {
+                font-size: 1.8rem;
+            }
+        }
+
+        &__hero {
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 3.2rem;
+
+            @media (max-width: 768px) {
+                padding: 0; // La imagen va de borde a borde en móvil para impacto visual
+            }
+            
+            &-img {
+                width: 100%;
+                aspect-ratio: 16/9;
+                object-fit: cover;
+                border-radius: $radius-lg;
+                box-shadow: $shadow-soft;
+
+                @media (max-width: 768px) {
+                    border-radius: 0; // Eliminamos bordes en mobile si va edge-to-edge
+                }
+            }
+        }
+
+        &__body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 3.2rem;
+
+            @media (max-width: 768px) {
+                padding: 0 2.4rem;
+            }
+        }
+
+        &__content {
+            padding: 4.8rem 0;
+
+            @media (max-width: 768px) {
+                padding: 3.2rem 0;
+            }
+
+            :global(h2) {
+                font-size: 3.2rem;
+                color: clr('brand', 'primary');
+                margin: 4.8rem 0 2rem;
+                font-weight: $font-weight-medium;
+                border-bottom: 1px solid clr('brand', 'secondary');
+                padding-bottom: 1.2rem;
+
+                @media (max-width: 768px) {
+                    font-size: 2.6rem;
+                }
+            }
+
+            :global(p) {
+                font-size: 1.76rem;
+                line-height: 1.8;
+                color: clr('text', 'main');
+                margin-bottom: 2.4rem;
+                font-weight: $font-weight-light;
+
+                @media (max-width: 768px) {
+                    font-size: 1.6rem;
+                }
+            }
+
+            :global(blockquote) {
+                border-left: 4px solid clr('brand', 'primary');
+                padding: 1.2rem 0 1.2rem 2.4rem;
+                margin: 4rem 0;
+                background-color: rgba(clr('brand', 'secondary'), 0.05);
+                border-radius: 0 8px 8px 0;
+
+                p { 
+                    font-size: 2rem; 
+                    font-style: italic;
+                    margin-bottom: 0;
+
+                    @media (max-width: 768px) {
+                        font-size: 1.8rem;
+                    }
+                }
+            }
+
+            :global(img) {
+                border-radius: 12px;
+                margin: 3.2rem 0;
+            }
+        }
+
+        &__footer {
+            margin-top: 4.8rem;
+            padding-top: 4.8rem;
+            border-top: 1px solid clr('brand', 'secondary');
+
+            @media (max-width: 768px) {
+                margin-top: 3.2rem;
+                display: flex;
+                justify-content: center; // Centramos el botón en móvil para mejor UX
+            }
+        }
     }
 
-    .hero-content {
-        position: relative;
-        z-index: 2;
-        padding-bottom: 4rem;
-        max-width: 800px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
-    .category {
-        background: var(--anami-brand-primary, #C47F6B);
-        padding: 4px 12px;
-        border-radius: 50px;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 1rem;
-        display: inline-block;
-    }
-
-    h1 {
-        font-size: 3rem;
-        line-height: 1.1;
-        margin-bottom: 1rem;
-    }
-
-    /* Contenedor de lectura */
-    .content-wrapper {
-        max-width: 800px;
-        margin: -3rem auto 0; /* Efecto flotante sobre el hero */
-        background: var(--anami-bg-surface, white);
-        padding: 3rem;
-        border-radius: 24px 24px 0 0;
-        position: relative;
-        z-index: 3;
-    }
-
-    /* Estilos básicos para el Markdown renderizado */
-    .markdown-body {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        color: var(--anami-text-main, #333);
-    }
-    
-    .markdown-body h2 {
-        color: var(--anami-brand-primary, #C47F6B);
-        margin-top: 2rem;
-        font-size: 1.8rem;
-    }
-    
-    .markdown-body p {
-        margin-bottom: 1.5rem;
-    }
-
-    .markdown-body blockquote {
-        border-left: 4px solid var(--anami-brand-primary, #C47F6B);
-        padding-left: 1rem;
-        font-style: italic;
-        color: var(--anami-text-light, #777);
-        margin: 2rem 0;
-    }
-
-    .back-link {
-        display: inline-block;
-        margin-top: 3rem;
-        color: var(--anami-brand-primary, #C47F6B);
+    .an-nav-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 1.2rem;
         text-decoration: none;
-        font-weight: 500;
-    }
+        color: clr('text', 'main');
+        font-weight: $font-weight-medium;
+        font-size: 1.44rem;
+        transition: $transition-base;
+        padding: 0.8rem 1.6rem;
+        border-radius: 8px;
 
-    @media (max-width: 768px) {
-        h1 { font-size: 2rem; }
-        .content-wrapper { padding: 2rem 1.5rem; margin-top: 0; border-radius: 0; }
-        .post-hero { height: 50vh; }
+        &:hover {
+            color: clr('brand', 'primary');
+            background-color: rgba(clr('brand', 'secondary'), 0.1);
+            svg { transform: translateX(-6px); }
+        }
+
+        svg { transition: transform 0.3s ease; }
     }
 </style>

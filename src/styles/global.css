@@ -8,7 +8,6 @@ body {
   padding: 0;
   /* Usamos las variables de tu librería para consistencia */
   background-color: var(--anami-bg-body, #fffcfa);
-  font-family: "Outfit", sans-serif;
 }
 
 /* Ajuste de scroll para que el navbar sticky no tape los títulos */

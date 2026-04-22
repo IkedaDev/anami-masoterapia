@@ -1,9 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../layouts/HomeLayout.astro';
 import AnamiCalendar from '../presentation/components/Calendar/AnamiCalendar.jsx';
 
 // Importamos estilos para asegurar consistencia
-import '@ikedadev/anami-ui/src/styles/tokens.css';
 import '../styles/global.css';
 ---
 
@@ -16,16 +15,12 @@ import '../styles/global.css';
         <div class="agenda-container">
             
             <div class="agenda-header">
-                <span class="agenda-subtitle">Agenda</span>
-                <h1 class="agenda-title">
+                <span class="an-text--subtitle">Agenda</span>
+                <h1 class="an-text--h1">
                     Calendario de Citas
                 </h1>
             </div>
 
-            <!-- 
-                Cargamos el componente de React.
-                'client:only="react"' es crucial aquí para evitar errores de Firebase en el build time de Astro.
-            -->
             <AnamiCalendar client:only="react" />
             
         </div>
@@ -55,24 +50,6 @@ import '../styles/global.css';
     .agenda-header {
         text-align: center;
         margin-bottom: 2.5rem;
-    }
-
-    .agenda-subtitle {
-        color: var(--anami-brand-primary, #C47F6B);
-        text-transform: uppercase;
-        letter-spacing: 2px; /* tracking-widest equiv */
-        font-size: 0.875rem; /* text-sm */
-        font-weight: 500; /* font-medium */
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    .agenda-title {
-        font-size: 2.25rem; /* text-4xl */
-        line-height: 1.1;
-        font-weight: 300; /* font-light */
-        color: var(--anami-text-main, #4A403A);
-        margin: 0;
     }
 
     @media (min-width: 768px) {

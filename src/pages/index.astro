@@ -1,10 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Bio from '../components/Bio.astro';
+import Layout from '../layouts/HomeLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Bio from '../components/home/Bio.astro';
 import { hotelFeatures, contactInfo } from '../utils/data';
-import HotelSection from '../components/HotelSection.astro';
-import ServiceGrid from '../components/ServiceGrid.astro';
+import HotelSection from '../components/home/HotelSection.astro';
+import ServiceGrid from '../components/home/ServiceGrid.astro';
+import CtaCard from '../components/home/CtaCard.astro';
+import ContactSection from '../components/home/ContactSection.astro';
 
 const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:3000/v1"; // Fallback para desarrollo local
 
@@ -67,6 +69,22 @@ try {
         />
     </section>
 
+    <section id="reserva">
+        <CtaCard
+            title="Reserva tu momento"
+            text="Regálate un respiro y desconecta del estrés diario. Un espacio diseñado para tu bienestar total."
+            buttonText="Agendar ahora"
+            imageUrl="https://i.imgur.com/d3kIHg2.jpeg"
+        />
+    </section>
+    <section id="contacto">
+        <ContactSection
+        phone={contactInfo.phone}
+        email={contactInfo.email}
+        instagram={contactInfo.instagram}
+        address={contactInfo.address}
+        />
+    </section>
 </Layout>
     
 
