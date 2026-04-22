@@ -1,0 +1,29 @@
+---
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+<footer class="an-footer">
+  <div class="an-container">
+    <p class="an-text--body">{text}</p>
+  </div>
+</footer>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-footer {
+    background-color: clr('bg', 'footer'); //
+    color: clr('text', 'light'); //
+    padding: 4.8rem 2rem;
+    text-align: center;
+    margin-top: 6.4rem;
+
+    p {
+      font-size: 1.44rem;
+      font-weight: $font-weight-light; //
+    }
+  }
+</style>

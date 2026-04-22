@@ -25,11 +25,9 @@ try {
   }
 } catch (error) {
   console.error("Fallo al obtener servicios desde el backend durante el build:", error);
-  // Fallback opcional: podrías cargar datos estáticos de respaldo si la API falla
-  // servicesData = [ ... datos de respaldo ... ];
+
 }
 
-// Preparamos los JSON strings para pasarlos a los Web Components
 const servicesJson = JSON.stringify(servicesData);
 const hotelJson = JSON.stringify(hotelFeatures);
 
