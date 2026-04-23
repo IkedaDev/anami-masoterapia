@@ -1,0 +1,42 @@
+---
+// src/layouts/Layout.astro
+import SeoHead from '../components/SeoHead.astro';
+import GoogleAnalitycs from '../components/GoogleAnalitycs.astro';
+import Navbar from '../components/home/Navbar.astro';
+import Footer from '../components/home/Footer.astro';
+import WhatsappButton from '../components/home/WhatsappButton.astro';
+
+// Importamos el CSS de la nueva librería v1.3.0
+import '@ikedadev/anami-ui/dist/anami.css'; 
+import '../styles/global.css';
+
+const { title, description } = Astro.props;
+
+const navLinks = [
+    { text: "Inicio", href: "/#inicio" },
+    { text: "Servicios", href: "/#servicios" },
+    { text: "Hotel", href: "/#hotel" },
+    { text: "Contacto", href: "/#contacto" },
+    { text: "Agenda", href: "/agenda" },
+    { text: "Blog", href: "/blog" },
+];
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+        <GoogleAnalitycs />
+        <SeoHead title={title} description={description} />
+	</head>
+	<body>
+        <Navbar logo="Anami Masoterapia" links={navLinks} />
+        
+        <main>
+		    <slot />
+        </main>
+     
+        <Footer text="© 2025 Anami Masoterapia. Temuco, Chile." />
+        <WhatsappButton phone="56963564897" />
+
+        </body>
+</html>

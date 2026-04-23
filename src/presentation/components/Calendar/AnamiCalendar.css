@@ -8,12 +8,11 @@
   );
   border: 1px solid var(--anami-brand-secondary, #e8d3cd);
   overflow: hidden;
-  font-family: var(--anami-font-main, sans-serif);
 }
 
 /* Header */
 .calendar-header {
-  padding: 1.5rem;
+  padding: 2.4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,7 +21,7 @@
 }
 
 .calendar-title {
-  font-size: 1.5rem;
+  font-size: 2.4rem;
   color: var(--anami-text-main, #4a403a);
   font-weight: 300;
   margin: 0;
@@ -40,8 +39,12 @@
 }
 
 .nav-btn {
-  padding: 0.5rem 1rem;
+  height: 3.3rem;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.6rem;
   border-radius: 50px;
+  font-size: 1.3rem;
   border: 1px solid var(--anami-brand-primary, #c47f6b);
   color: var(--anami-brand-primary, #c47f6b);
   background: transparent;
@@ -83,7 +86,7 @@
 
 /* Encabezados de Días */
 .day-header {
-  padding: 1rem;
+  padding: 1.6rem;
   text-align: center;
   border-left: 1px solid #f9f9f9;
 }
@@ -94,7 +97,7 @@
 
 .day-name {
   color: var(--anami-brand-primary, #c47f6b);
-  font-size: 0.85rem;
+  font-size: 1.36rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 500;
@@ -103,7 +106,7 @@
 
 .day-number {
   color: var(--anami-text-main, #4a403a);
-  font-size: 1.25rem;
+  font-size: 2rem;
   font-weight: 300;
 }
 
@@ -111,7 +114,7 @@
   padding: 1rem;
   text-align: center;
   color: var(--anami-text-light, #8c817c);
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -142,10 +145,10 @@
 }
 
 .time-label {
-  padding: 0.5rem;
+  padding: 0.8rem;
   text-align: center;
   color: var(--anami-text-light, #8c817c);
-  font-size: 0.75rem;
+  font-size: 1.2rem;
   margin-top: -10px;
 }
 
@@ -187,7 +190,9 @@
   align-items: center; /* Centrado horizontal */
   text-align: center;
 
-  transition: transform 0.2s ease, box-shadow 0.2s;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s;
 }
 
 /* Estilo específico para bloques fusionados (opcional si quieres diferenciarlos) */
@@ -212,7 +217,7 @@
 
 .appt-time-range {
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 1.28rem;
   white-space: nowrap;
 }
 
@@ -222,13 +227,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.75rem;
+  font-size: 1.2rem;
 }
 
 /* --- VISTA MÓVIL (Oculta por defecto) --- */
 .calendar-view-mobile {
   display: none;
-  padding: 1.5rem;
+  padding: 2.4rem;
   background-color: #f8f8f8;
 }
 
@@ -236,7 +241,7 @@
   background: #fff;
   border: none;
   border-radius: 16px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.4rem;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
@@ -248,7 +253,7 @@
 
 .mobile-day-header {
   background: #fff;
-  padding: 1rem 1.5rem;
+  padding: 1.6rem 2.4rem;
   border-bottom: 1px solid #f0f0f0;
   display: flex;
   justify-content: space-between;
@@ -256,7 +261,7 @@
 }
 
 .mobile-day-name {
-  font-size: 1.1rem;
+  font-size: 1.76rem;
   font-weight: 600;
   color: var(--anami-text-main, #4a403a);
   text-transform: capitalize;
@@ -271,15 +276,15 @@
 }
 
 .mobile-day-body {
-  padding: 1rem 1.5rem;
+  padding: 1rem 2.4rem;
 }
 
 .mobile-appointment-item {
   background: white;
   border-left: 4px solid var(--anami-brand-primary, #c47f6b);
-  padding: 1rem;
+  padding: 1.6rem;
   border-radius: 8px;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -290,12 +295,12 @@
 
 .mobile-appt-time {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.6rem;
   color: var(--anami-text-main, #4a403a);
 }
 
 .mobile-appt-status {
-  font-size: 0.75rem;
+  font-size: 1.2rem;
   background: var(--anami-brand-blob, #f9ebe7);
   color: var(--anami-brand-primary, #c47f6b);
   padding: 4px 10px;
@@ -306,11 +311,11 @@
 }
 
 .mobile-empty-state {
-  padding: 1rem;
+  padding: 1.6rem;
   text-align: center;
   color: var(--anami-text-light, #8c817c);
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 1.44rem;
   background-color: #fafafa;
   border-radius: 8px;
   border: 1px dashed #e0e0e0;

@@ -1,78 +1,80 @@
 ---
+// src/pages/blog/index.astro
 import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import Layout from '../../layouts/HomeLayout.astro';
+import BlogCard from '../../components/home/BlogCard.astro';
 
-// Obtener todos los posts y ordenarlos por fecha (más nuevo primero)
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-const title = "Blog";
-const description = "Consejos de bienestar, salud y noticias de Anami Masoterapia.";
+const posts = await getCollection('blog');
+// Ordenamos por fecha descendente
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout title={title} description={description}>
-    <!-- Encabezado simple -->
-    <section class="blog-header">
-        <div class="container">
-            <h1>{title}</h1>
-            <p>Consejos para tu bienestar</p>
-        </div>
-    </section>
+<Layout 
+  title="Blog de Bienestar | Anami Masoterapia"
+  description="Consejos sobre masoterapia, cuidado personal y relajación en Temuco."
+>
+  <section class="an-blog-page">
+    <header class="an-blog-page__header">
+      <h1 class="an-blog-page__title">Nuestro Blog</h1>
+      <p class="an-blog-page__subtitle">Espacio de bienestar y autocuidado</p>
+    </header>
 
-    <section class="blog-grid">
-        <!-- Grid de Artículos -->
-            {posts.map((post) => (
-                <anami-blog-card
-                    title={post.data.title}
-                    excerpt={post.data.description}
-                    category={post.data.category}
-                    date={post.data.pubDate.toLocaleDateString('es-CL', { year: 'numeric', month: 'short', day: 'numeric' })}
-                    image={post.data.image}
-                    href={`/blog/${post.slug}`} 
-                ></anami-blog-card>
-            ))}
-    </section>
+    <div class="an-blog-page__grid">
+      {sortedPosts.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          excerpt={post.data.description}
+        imageUrl={post.data.image}
+          linkHref={`/blog/${post.slug}`}
+          date={post.data.pubDate.toLocaleDateString('es-CL', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}
+        />
+      ))}
+    </div>
+  </section>
 </Layout>
 
-<style>
-    .blog-header {
-        text-align: center;
-        padding: 4rem 1rem;
-        background-color: var(--anami-brand-blob, #F9EBE7);
-        margin-bottom: 3rem;
-    }
-    .blog-header h1 {
-        font-size: 2.5rem;
-        color: var(--anami-text-main, #4A403A);
-        margin-bottom: 0.5rem;
-    }
-    .blog-header p {
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: var(--anami-brand-primary, #C47F6B);
-        font-weight: 500;
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-blog-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8rem 3.2rem;
+
+    &__header {
+      text-align: center;
+      margin-bottom: 8rem;
     }
 
-    .blog-section-header {
-        text-align: center;
-        margin-bottom: 3rem;
-      }
+    &__title {
+      font-size: 5.6rem;
+      font-weight: $font-weight-light;
+      color: clr('text', 'main');
+      margin-bottom: 1.6rem;
+    }
 
-    .blog-grid {
-        display: grid;
-        padding: 4rem 2rem;
-        /* Tarjetas más anchas (350px min) para estilo editorial */
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 3rem; /* Espaciado generoso */
-        margin: 0 auto; /* Centrado horizontal */
-        max-width: 1300px;
+    &__subtitle {
+      font-size: 1.92rem;
+      color: clr('brand', 'primary');
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
+      gap: 4.8rem;
     }
 
     @media (max-width: 768px) {
-        .blog-grid {
-            grid-template-columns: 1fr; /* Una columna en móvil */
-            gap: 2rem;
-        }
+      padding: 4.8rem 2rem;
+      &__title { font-size: 4rem; }
+      &__grid { grid-template-columns: 1fr; }
     }
+  }
 </style>

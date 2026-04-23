@@ -37,7 +37,7 @@ const AnamiCalendar = () => {
       try {
         const data = await repository.getAppointmentsByDateRange(
           startDate,
-          endOfWeekDate
+          endOfWeekDate,
         );
         setAppointments(data);
         console.log({ data });
@@ -55,7 +55,7 @@ const AnamiCalendar = () => {
   const prevWeek = () => setCurrentDate(subWeeks(currentDate, 1));
 
   const weekDays = Array.from({ length: 7 }).map((_, i) =>
-    addDays(startDate, i)
+    addDays(startDate, i),
   );
 
   const timeSlots = [];
@@ -217,7 +217,7 @@ const AnamiCalendar = () => {
 
                             const durationMinutes = differenceInMinutes(
                               block.end,
-                              block.start
+                              block.start,
                             );
 
                             // Cálculos de estilo
@@ -239,7 +239,7 @@ const AnamiCalendar = () => {
                                 }}
                                 title={`${format(
                                   block.start,
-                                  "HH:mm"
+                                  "HH:mm",
                                 )} - ${format(block.end, "HH:mm")} (${
                                   block.originalIds.length
                                 } reservas)`}

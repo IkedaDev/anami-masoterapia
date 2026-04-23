@@ -1,0 +1,206 @@
+---
+// src/components/ContactSection.astro
+interface Props {
+  phone: string;
+  email: string;
+  instagram: string;
+  address: string;
+}
+
+const { phone, email, instagram, address } = Astro.props;
+
+// Formateo de links
+const phoneHref = phone.replace(/\s+/g, "");
+const instaUser = instagram.replace("@", "");
+---
+
+<section class="an-contact-premium">
+  <div class="an-contact-premium__container">
+    <header class="an-contact-premium__header">
+      <span class="an-contact-premium__tag">¿Hablamos?</span>
+      <h2 class="an-contact-premium__title">Ponte en contacto</h2>
+      <p class="an-contact-premium__subtitle">Estamos aquí para acompañarte en tu camino al bienestar.</p>
+    </header>
+
+    <div class="an-contact-premium__grid">
+      <a href={`tel:${phoneHref}`} class="an-contact-card">
+        <div class="an-contact-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </div>
+        <div class="an-contact-card__content">
+            <h3 class="an-contact-card__label">Teléfono</h3>
+            <span class="an-contact-card__value">{phone}</span>
+        </div>
+      </a>
+
+      <a href={`https://instagram.com/${instaUser}`} target="_blank" rel="noopener noreferrer" class="an-contact-card">
+        <div class="an-contact-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </div>
+        <div class="an-contact-card__content">
+            <h3 class="an-contact-card__label">Instagram</h3>
+            <span class="an-contact-card__value">{instagram}</span>
+        </div>
+      </a>
+
+      <a href={`mailto:${email}`} class="an-contact-card">
+        <div class="an-contact-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </div>
+        <div class="an-contact-card__content">
+            <h3 class="an-contact-card__label">Email</h3>
+            <span class="an-contact-card__value">{email}</span>
+        </div>
+      </a>
+
+      <div class="an-contact-card an-contact-card--static">
+        <div class="an-contact-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
+        <div class="an-contact-card__content">
+            <h3 class="an-contact-card__label">Ubicación</h3>
+            <span class="an-contact-card__value">{address}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-contact-premium {
+    padding: 12.8rem 3.2rem;
+    background-color: clr('bg', 'body');
+
+    &__container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    &__header {
+      text-align: center;
+      margin-bottom: 8rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &__tag {
+      display: block;
+      font-size: 1.28rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: clr('brand', 'primary');
+      font-weight: $font-weight-medium;
+      margin-bottom: 1.6rem;
+    }
+
+    &__title {
+      font-size: 4.8rem;
+      color: clr('text', 'main');
+      margin-bottom: 2.4rem;
+      font-weight: $font-weight-medium;
+      letter-spacing: -0.02em;
+    }
+
+    &__subtitle {
+      font-size: 1.76rem;
+      color: clr('text', 'light');
+      line-height: 1.6;
+      font-weight: $font-weight-light;
+    }
+
+    &__grid {
+      display: grid;
+      // Ajustamos el min-width para que las cards no sean demasiado delgadas
+      grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+      gap: 3.2rem;
+    }
+  }
+
+  .an-contact-card {
+    background: clr('bg', 'surface');
+    padding: 4.8rem 3.2rem;
+    border-radius: $radius-lg;
+    display: flex;
+    flex-direction: column; // CAMBIO CLAVE: Layout Vertical
+    align-items: center;
+    text-align: center;
+    gap: 2.4rem;
+    text-decoration: none;
+    transition: $transition-base;
+    border: 1px solid clr('brand', 'secondary');
+    box-shadow: $shadow-soft;
+
+    &:not(&--static):hover {
+      transform: translateY(-8px);
+      box-shadow: $shadow-hover;
+      border-color: clr('brand', 'primary');
+
+      .an-contact-card__icon {
+        background-color: clr('brand', 'primary');
+        color: white;
+        transform: scale(1.1);
+      }
+    }
+
+    &__icon {
+      width: 7.2rem;
+      height: 7.2rem;
+      background-color: rgba(clr('brand', 'secondary'), 0.2);
+      border-radius: $radius-pill;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: clr('brand', 'primary');
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+
+      svg {
+        width: 3.2rem;
+        height: 3.2rem;
+      }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%; // Asegura que el texto use todo el espacio
+    }
+
+    &__label {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: clr('text', 'light');
+      margin: 0;
+      font-weight: $font-weight-medium;
+    }
+
+    &__value {
+      font-size: 1.76rem;
+      color: clr('text', 'main');
+      font-weight: $font-weight-medium;
+      line-height: 1.4;
+      // Seguridad para textos muy largos
+      word-break: break-word; 
+    }
+
+    &--static {
+      cursor: default;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .an-contact-premium {
+      padding: 8rem 2rem;
+    }
+    
+    .an-contact-card {
+        padding: 4rem 2.4rem;
+    }
+  }
+</style>

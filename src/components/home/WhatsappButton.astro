@@ -1,0 +1,31 @@
+---
+interface Props {
+  phone: string;
+}
+const { phone } = Astro.props;
+---
+<a href={`https://wa.me/${phone}`} class="an-whatsapp-float" target="_blank" rel="noopener noreferrer">
+  <svg viewBox="0 0 32 32" width="34" height="34">
+    <path d="M16 2C8.268 2 2 8.268 2 16c0 2.476.643 4.814 1.777 6.85L2.6 29.4l6.65-1.74C11.186 28.357 13.524 29 16 29c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 24.5c-2.18 0-4.24-.567-6.04-1.556l-.433-.238-3.77.986.996-3.675-.24-.44C5.568 20.24 5 18.18 5 16c0-6.065 4.935-11 11-11s11 4.935 11 11-4.935 11-11 11z" fill="white"/>
+  </svg>
+</a>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-whatsapp-float {
+    position: fixed;
+    bottom: 3rem; right: 3rem;
+    background-color: #25D366; // Color oficial WA
+    width: 6.4rem; height: 6.4rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0.4rem 2rem rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: $transition-base; //
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+</style>

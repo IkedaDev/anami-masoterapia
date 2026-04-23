@@ -1,0 +1,150 @@
+---
+interface Props {
+  logo: string;
+  links: { text: string; href: string }[];
+}
+
+const { logo, links } = Astro.props;
+---
+
+<header class="an-navbar">
+  <nav class="an-navbar__container">
+    <h1 class="an-navbar__logo">
+        <a href="/">{logo}</a>
+    </h1>
+
+    <div class="an-navbar__links" id="nav-links">
+      {links.map((link) => (
+        <a href={link.href} class="an-navbar__link">
+          {link.text}
+        </a>
+      ))}
+    </div>
+
+    <button class="an-navbar__menu-btn" id="menu-toggle" aria-label="Abrir menú">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+<style lang="scss">
+  @use "@ikedadev/anami-ui/scss/abstracts/colors" as *;
+  @use "@ikedadev/anami-ui/scss/abstracts/variables" as *;
+
+  .an-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid clr('brand', 'secondary');
+    background: rgba(clr('bg', 'body'), 0.95);
+    backdrop-filter: blur(8px);
+    transition: $transition-base;
+
+    &__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 3rem; // Aumentamos padding vertical
+      max-width: 1300px;
+      margin: 0 auto;
+
+      @media (max-width: 768px) {
+        padding: 1.2rem 1.5rem; // Padding lateral móvil del original
+      }
+    }
+
+    // Mixin local para evitar repetición de la animación de la línea
+    @mixin underline-animation {
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: clr('brand', 'primary');
+        transition: width 0.3s ease;
+      }
+      &:hover {
+        color: clr('brand', 'primary');
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+
+    &__logo {
+      font-size: 2.24rem; // Aumentado de 1.4rem (ahora 18px)
+      font-weight: $font-weight-medium;
+      color: clr('text', 'main');
+      text-decoration: none;
+      letter-spacing: -0.03em;
+      transition: $transition-base;
+      display: inline-block;
+      
+      @include underline-animation; // Aplicamos la misma animación que el menú
+    }
+
+    &__links {
+      display: flex;
+      gap: 3.2rem; // Aumentamos el espacio entre links
+      align-items: center;
+
+      @media (max-width: 768px) {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; width: 100%; height: 100vh;
+        flex-direction: column; justify-content: center;
+        background: clr('bg', 'surface');
+        transition: transform 0.3s ease-out;
+        transform: translateX(-100%);
+        &.is-open {
+          display: flex;
+          transform: translateX(0);
+        }
+      }
+    }
+
+    &__link {
+      text-decoration: none;
+      color: clr('text', 'main');
+      font-size: 1.52rem; // Aumentado de 0.95rem (ahora 14px)
+      font-weight: $font-weight-light;
+      transition: color 0.3s ease;
+      
+      @include underline-animation;
+
+      @media (max-width: 768px) {
+        font-size: 2.4rem; // 24px en móvil
+        font-weight: $font-weight-regular;
+      }
+    }
+
+    &__menu-btn {
+      display: none;
+      background: none; border: none; cursor: pointer;
+      color: clr('text', 'main');
+      @media (max-width: 768px) { display: block; }
+    }
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+
+  menuToggle?.addEventListener('click', () => {
+    navLinks?.classList.toggle('is-open');
+  });
+
+  navLinks?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('is-open');
+    });
+  });
+</script>
