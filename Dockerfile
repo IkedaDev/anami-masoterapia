@@ -14,6 +14,9 @@ COPY . .
 ARG PUBLIC_API_URL
 ENV PUBLIC_API_URL=$PUBLIC_API_URL
 
+ARG PUBLIC_GA_ID
+ENV PUBLIC_GA_ID=$PUBLIC_GA_ID
+
 # Construir el sitio estático
 RUN yarn build
 

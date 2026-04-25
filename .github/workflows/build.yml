@@ -31,7 +31,7 @@ jobs:
           # INYECCIÓN DE VARIABLES SEGÚN RAMA
           build-args: |
             PUBLIC_API_URL=${{ github.ref_name == 'main' && 'https://api.temucomasajes.cl/v1' || 'https://api-qa.temucomasajes.cl/v1' }}
-
+            PUBLIC_GA_ID=${{secrets.PUBLIC_GA_ID}}
       - name: Update Infra Repo
         run: |
           TARGET_DIR=${{ github.ref_name == 'main' && 'tenants/anami/prod/frontend' || 'tenants/anami/qa/frontend' }}
