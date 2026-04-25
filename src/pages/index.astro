@@ -87,30 +87,3 @@ try {
     </section>
 </Layout>
     
-
-<script>
-    const wspPhone = "56963564897"
-
-    const serviceGrid = document.querySelector('anami-service-card-grid');
-    if (serviceGrid) {
-        serviceGrid.addEventListener('service-selected', (event:any) => {
-            const service = event.detail;
-            
-            console.log('Cliente interesando en:', service.name);
-            
-            const message = `Hola Anette, me interesa agendar un *${service.name}* que vi en tu web.`;
-            
-            window.open(`https://wa.me/${wspPhone}?text=${encodeURIComponent(message)}`, '_blank');
-        });
-    }
-    
-    const ctaCard = document.querySelector('anami-cta-card');
-    
-    if (ctaCard) {
-        ctaCard.addEventListener('cta-card-click', () => {
-            const message = `Hola Anette, me interesa agendar una hora.`;
-            
-            window.open(`https://wa.me/${wspPhone}?text=${encodeURIComponent(message)}`, '_blank');
-        });
-    }
-</script>

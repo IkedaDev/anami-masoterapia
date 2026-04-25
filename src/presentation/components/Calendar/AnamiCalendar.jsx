@@ -40,7 +40,6 @@ const AnamiCalendar = () => {
           endOfWeekDate,
         );
         setAppointments(data);
-        console.log({ data });
       } catch (error) {
         console.error("Error cargando citas:", error);
       } finally {

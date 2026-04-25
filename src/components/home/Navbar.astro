@@ -21,12 +21,10 @@ const { logo, links } = Astro.props;
       ))}
     </div>
 
-    <button class="an-navbar__menu-btn" id="menu-toggle" aria-label="Abrir menú">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
+    <button class="an-navbar__menu-btn" id="menu-toggle" aria-label="Menu">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
     </button>
   </nav>
 </header>
@@ -125,12 +123,76 @@ const { logo, links } = Astro.props;
       }
     }
 
+    /* --- LÓGICA DE HAMBURGER SLIDER CORREGIDA --- */
     &__menu-btn {
       display: none;
-      background: none; border: none; cursor: pointer;
-      color: clr('text', 'main');
-      @media (max-width: 768px) { display: block; }
-    }
+      @media (max-width: 768px) { display: flex; align-items: center; justify-content: center; }
+      
+      padding: 1.2rem;
+      cursor: pointer;
+      background-color: transparent;
+      border: 0;
+      margin: 0;
+      transition: opacity 0.15s linear;
+
+      &:hover { opacity: 0.8; }
+
+      .hamburger-box {
+        width: 2.4rem; // 24px
+        height: 1.42rem; // 19.2px
+        display: inline-block;
+        position: relative;
+      }
+
+      .hamburger-inner {
+        display: block;
+        top: 50%;
+        // COMPENSACIÓN: mitad del alto (0.32rem / 2) para centrado absoluto
+        margin-top: -0.16rem; 
+        
+        &, &::before, &::after {
+          width: 2.4rem;
+          height: 0.32rem; // Grosor de las barras
+          background-color: clr('text', 'main');
+          border-radius: 4px;
+          position: absolute;
+          transition-property: transform;
+          transition-duration: 0.15s;
+          transition-timing-function: ease;
+        }
+
+        &::before, &::after { content: ""; display: block; }
+
+        // POSICIÓN INICIAL: 8px arriba y abajo
+        &::before { top: -0.8rem; } 
+        &::after { top: 0.8rem; } 
+
+        transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      }
+
+      // ESTADO ACTIVO: La "X" perfecta
+      &.is-active {
+        .hamburger-inner {
+          // Gira la barra central
+          transform: rotate(45deg);
+          transition-delay: 0.12s;
+          transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+          &::before {
+            // Se desliza al centro y gira
+            top: 0;
+            opacity: 0; // En el slider original la de arriba se oculta o se fusiona
+            transition: top 0.1s ease, opacity 0.1s 0.12s linear;
+          }
+
+          &::after {
+            // Sube al centro y gira -90 (formando los -45 finales)
+            top: 0;
+            transform: rotate(-90deg);
+            transition: top 0.1s ease, transform 0.22s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+          }
+        }
+      }}
   }
 </style>
 
@@ -139,12 +201,22 @@ const { logo, links } = Astro.props;
   const navLinks = document.getElementById('nav-links');
 
   menuToggle?.addEventListener('click', () => {
-    navLinks?.classList.toggle('is-open');
+    const isOpen = navLinks?.classList.toggle('is-open');
+    menuToggle?.classList.toggle('is-active');
+    
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   });
 
-  navLinks?.querySelectorAll('a').forEach(link => {
+  const links = document.querySelectorAll('.an-navbar__link');
+  links.forEach(link => {
     link.addEventListener('click', () => {
-      navLinks.classList.remove('is-open');
+      navLinks?.classList.remove('is-open');
+      menuToggle?.classList.remove('is-active');
+      document.body.style.overflow = '';
     });
   });
 </script>
